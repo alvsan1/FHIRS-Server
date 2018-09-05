@@ -1,0 +1,7 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:CodeableConcept.coding [ Coding ], ... ; # 0..* Code defined by a terminology system
+  fhir:CodeableConcept.text [ string ]; # 0..1 Plain text representation of the concept
+]

@@ -1,0 +1,7 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:Period.start [ dateTime ]; # 0..1 Starting time with inclusive boundary
+  fhir:Period.end [ dateTime ]; # 0..1 End time with inclusive boundary, if not ongoing
+]

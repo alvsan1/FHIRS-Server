@@ -1,0 +1,10 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+	fhir:Coding.system [ uri ]; # 0..1 Identity of the terminology system
+	fhir:Coding.version [ string ]; # 0..1 Version of the system - if relevant
+	fhir:Coding.code [ code ]; # 0..1 Symbol in syntax defined by the system
+	fhir:Coding.display [ string ]; # 0..1 Representation defined by the system
+	fhir:Coding.userSelected [ boolean ]; # 0..1 If this coding was chosen directly by the user
+]

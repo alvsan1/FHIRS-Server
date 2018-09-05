@@ -1,0 +1,6 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[ a fhir:Specimen;  
+  fhir:Specimen.identifier [ Identifier ], ... ; # 0..* External Identifier
+  fhir:Specimen.status [ code ]; # 0..1 available | unavailable | unsatisfactory | entered-in-error
+]
