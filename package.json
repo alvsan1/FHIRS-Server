@@ -20,6 +20,7 @@
     "url": "https://github.com/alvsan1/FHIRS/issues"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "express-restify-mongoose": "^4.3.0",
     "method-override": "^2.3.10",
@@ -27,5 +28,8 @@
     "mongoose-validators": "^0.1.0",
     "valid-url": "^1.0.9"
   },
-  "homepage": "https://github.com/alvsan1/FHIRS#readme"
+  "homepage": "https://github.com/alvsan1/FHIRS#readme",
+  "devDependencies": {
+    "json-schema-generator": "^2.0.6"
+  }
 }
