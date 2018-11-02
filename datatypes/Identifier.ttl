@@ -3,7 +3,7 @@
 [
  # from Element: Element.extension
   fhir:Identifier.use [ code ]; # 0..1 usual | official | temp | secondary (If known)
-#  fhir:Identifier.type [ CodeableConcept ]; # 0..1 Description of identifier
+  fhir:Identifier.type [ CodeableConcept ]; # 0..1 Description of identifier
   fhir:Identifier.system [ uri ]; # 0..1 The namespace for the identifier value
   fhir:Identifier.value [ string ]; # 0..1 The value that is unique
   fhir:Identifier.period [ Period ]; # 0..1 Time period when id is/was valid for use
