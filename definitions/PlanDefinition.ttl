@@ -1,0 +1,100 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:PlanDefinition;
+  ##fhir:nodeRole fhir:treeRoot; # if this is the parser root
+#
+  ## from Resource: .id, .meta, .implicitRules, and .language
+  ## from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:PlanDefinition.url [ uri ]; # 0..1 Logical URI to reference this plan definition (globally unique)
+  #fhir:PlanDefinition.identifier [ Identifier ], ... ; # 0..* Additional identifier for the plan definition
+  #fhir:PlanDefinition.version [ string ]; # 0..1 Business version of the plan definition
+  #fhir:PlanDefinition.name [ string ]; # 0..1 Name for this plan definition (computer friendly)
+  #fhir:PlanDefinition.title [ string ]; # 0..1 Name for this plan definition (human friendly)
+  #fhir:PlanDefinition.type [ CodeableConcept ]; # 0..1 order-set | protocol | eca-rule
+  #fhir:PlanDefinition.status [ code ]; # 1..1 draft | active | retired | unknown
+  #fhir:PlanDefinition.experimental [ boolean ]; # 0..1 For testing purposes, not real usage
+  #fhir:PlanDefinition.date [ dateTime ]; # 0..1 Date this was last changed
+  #fhir:PlanDefinition.publisher [ string ]; # 0..1 Name of the publisher (organization or individual)
+  #fhir:PlanDefinition.description [ markdown ]; # 0..1 Natural language description of the plan definition
+  #fhir:PlanDefinition.purpose [ markdown ]; # 0..1 Why this plan definition is defined
+  #fhir:PlanDefinition.usage [ string ]; # 0..1 Describes the clinical usage of the asset
+  #fhir:PlanDefinition.approvalDate [ date ]; # 0..1 When the plan definition was approved by publisher
+  #fhir:PlanDefinition.lastReviewDate [ date ]; # 0..1 When the plan definition was last reviewed
+  #fhir:PlanDefinition.effectivePeriod [ Period ]; # 0..1 When the plan definition is expected to be used
+  #fhir:PlanDefinition.useContext [ UsageContext ], ... ; # 0..* Context the content is intended to support
+  #fhir:PlanDefinition.jurisdiction [ CodeableConcept ], ... ; # 0..* Intended jurisdiction for plan definition (if applicable)
+  #fhir:PlanDefinition.topic [ CodeableConcept ], ... ; # 0..* E.g. Education, Treatment, Assessment, etc
+  #fhir:PlanDefinition.contributor [ Contributor ], ... ; # 0..* A content contributor
+  #fhir:PlanDefinition.contact [ ContactDetail ], ... ; # 0..* Contact details for the publisher
+  #fhir:PlanDefinition.copyright [ markdown ]; # 0..1 Use and/or publishing restrictions
+  #fhir:PlanDefinition.relatedArtifact [ RelatedArtifact ], ... ; # 0..* Related artifacts for the asset
+  #fhir:PlanDefinition.library [ Reference(Library) ], ... ; # 0..* Logic used by the plan definition
+  #fhir:PlanDefinition.goal [ # 0..* What the plan is trying to accomplish
+    #fhir:PlanDefinition.goal.category [ CodeableConcept ]; # 0..1 E.g. Treatment, dietary, behavioral, etc
+    #fhir:PlanDefinition.goal.description [ CodeableConcept ]; # 1..1 Code or text describing the goal
+    #fhir:PlanDefinition.goal.priority [ CodeableConcept ]; # 0..1 high-priority | medium-priority | low-priority
+    #fhir:PlanDefinition.goal.start [ CodeableConcept ]; # 0..1 When goal pursuit begins
+    #fhir:PlanDefinition.goal.addresses [ CodeableConcept ], ... ; # 0..* What does the goal address
+    #fhir:PlanDefinition.goal.documentation [ RelatedArtifact ], ... ; # 0..* Supporting documentation for the goal
+    #fhir:PlanDefinition.goal.target [ # 0..* Target outcome for the goal
+      #fhir:PlanDefinition.goal.target.measure [ CodeableConcept ]; # 0..1 The parameter whose value is to be tracked
+      ## PlanDefinition.goal.target.detail[x] : 0..1 The target value to be achieved. One of these 3
+        #fhir:PlanDefinition.goal.target.detailQuantity [ Quantity ]
+        #fhir:PlanDefinition.goal.target.detailRange [ Range ]
+        #fhir:PlanDefinition.goal.target.detailCodeableConcept [ CodeableConcept ]
+      #fhir:PlanDefinition.goal.target.due [ Duration ]; # 0..1 Reach goal within
+    #], ...;
+  #], ...;
+  #fhir:PlanDefinition.action [ # 0..* Action defined by the plan
+    #fhir:PlanDefinition.action.label [ string ]; # 0..1 User-visible label for the action (e.g. 1. or A.)
+    #fhir:PlanDefinition.action.title [ string ]; # 0..1 User-visible title
+    #fhir:PlanDefinition.action.description [ string ]; # 0..1 Short description of the action
+    #fhir:PlanDefinition.action.textEquivalent [ string ]; # 0..1 Static text equivalent of the action, used if the dynamic aspects cannot be interpreted by the receiving system
+    #fhir:PlanDefinition.action.code [ CodeableConcept ], ... ; # 0..* Code representing the meaning of the action or sub-actions
+    #fhir:PlanDefinition.action.reason [ CodeableConcept ], ... ; # 0..* Why the action should be performed
+    #fhir:PlanDefinition.action.documentation [ RelatedArtifact ], ... ; # 0..* Supporting documentation for the intended performer of the action
+    #fhir:PlanDefinition.action.goalId [ id ], ... ; # 0..* What goals this action supports
+    #fhir:PlanDefinition.action.triggerDefinition [ TriggerDefinition ], ... ; # 0..* When the action should be triggered
+    #fhir:PlanDefinition.action.condition [ # 0..* Whether or not the action is applicable
+      #fhir:PlanDefinition.action.condition.kind [ code ]; # 1..1 applicability | start | stop
+      #fhir:PlanDefinition.action.condition.description [ string ]; # 0..1 Natural language description of the condition
+      #fhir:PlanDefinition.action.condition.language [ string ]; # 0..1 Language of the expression
+      #fhir:PlanDefinition.action.condition.expression [ string ]; # 0..1 Boolean-valued expression
+    #], ...;
+    #fhir:PlanDefinition.action.input [ DataRequirement ], ... ; # 0..* Input data requirements
+    #fhir:PlanDefinition.action.output [ DataRequirement ], ... ; # 0..* Output data definition
+    #fhir:PlanDefinition.action.relatedAction [ # 0..* Relationship to another action
+      #fhir:PlanDefinition.action.relatedAction.actionId [ id ]; # 1..1 What action is this related to
+      #fhir:PlanDefinition.action.relatedAction.relationship [ code ]; # 1..1 before-start | before | before-end | concurrent-with-start | concurrent | concurrent-with-end | after-start | after | after-end
+      ## PlanDefinition.action.relatedAction.offset[x] : 0..1 Time offset for the relationship. One of these 2
+        #fhir:PlanDefinition.action.relatedAction.offsetDuration [ Duration ]
+        #fhir:PlanDefinition.action.relatedAction.offsetRange [ Range ]
+    #], ...;
+    ## PlanDefinition.action.timing[x] : 0..1 When the action should take place. One of these 5
+      #fhir:PlanDefinition.action.timingDateTime [ dateTime ]
+      #fhir:PlanDefinition.action.timingPeriod [ Period ]
+      #fhir:PlanDefinition.action.timingDuration [ Duration ]
+      #fhir:PlanDefinition.action.timingRange [ Range ]
+      #fhir:PlanDefinition.action.timingTiming [ Timing ]
+    #fhir:PlanDefinition.action.participant [ # 0..* Who should participate in the action
+      #fhir:PlanDefinition.action.participant.type [ code ]; # 1..1 patient | practitioner | related-person
+      #fhir:PlanDefinition.action.participant.role [ CodeableConcept ]; # 0..1 E.g. Nurse, Surgeon, Parent, etc
+    #], ...;
+    #fhir:PlanDefinition.action.type [ Coding ]; # 0..1 create | update | remove | fire-event
+    #fhir:PlanDefinition.action.groupingBehavior [ code ]; # 0..1 visual-group | logical-group | sentence-group
+    #fhir:PlanDefinition.action.selectionBehavior [ code ]; # 0..1 any | all | all-or-none | exactly-one | at-most-one | one-or-more
+    #fhir:PlanDefinition.action.requiredBehavior [ code ]; # 0..1 must | could | must-unless-documented
+    #fhir:PlanDefinition.action.precheckBehavior [ code ]; # 0..1 yes | no
+    #fhir:PlanDefinition.action.cardinalityBehavior [ code ]; # 0..1 single | multiple
+    #fhir:PlanDefinition.action.definition [ Reference(ActivityDefinition|PlanDefinition) ]; # 0..1 Description of the activity to be performed
+    #fhir:PlanDefinition.action.transform [ Reference(StructureMap) ]; # 0..1 Transform to apply the template
+    #fhir:PlanDefinition.action.dynamicValue [ # 0..* Dynamic aspects of the definition
+      #fhir:PlanDefinition.action.dynamicValue.description [ string ]; # 0..1 Natural language description of the dynamic value
+      #fhir:PlanDefinition.action.dynamicValue.path [ string ]; # 0..1 The path to the element to be set dynamically
+      #fhir:PlanDefinition.action.dynamicValue.language [ string ]; # 0..1 Language of the expression
+      #fhir:PlanDefinition.action.dynamicValue.expression [ string ]; # 0..1 An expression that provides the dynamic value for the customization
+    #], ...;
+    #fhir:PlanDefinition.action.action [ See PlanDefinition.action ], ... ; # 0..* A sub-action
+#  ], ...;
+]

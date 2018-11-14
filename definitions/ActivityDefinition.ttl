@@ -1,0 +1,57 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:ActivityDefinition;
+  ##fhir:nodeRole fhir:treeRoot; # if this is the parser root
+#
+  ## from Resource: .id, .meta, .implicitRules, and .language
+  ## from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:ActivityDefinition.url [ uri ]; # 0..1 Logical URI to reference this activity definition (globally unique)
+  #fhir:ActivityDefinition.identifier [ Identifier ], ... ; # 0..* Additional identifier for the activity definition
+  #fhir:ActivityDefinition.version [ string ]; # 0..1 Business version of the activity definition
+  #fhir:ActivityDefinition.name [ string ]; # 0..1 Name for this activity definition (computer friendly)
+  #fhir:ActivityDefinition.title [ string ]; # 0..1 Name for this activity definition (human friendly)
+  #fhir:ActivityDefinition.status [ code ]; # 1..1 draft | active | retired | unknown
+  #fhir:ActivityDefinition.experimental [ boolean ]; # 0..1 For testing purposes, not real usage
+  #fhir:ActivityDefinition.date [ dateTime ]; # 0..1 Date this was last changed
+  #fhir:ActivityDefinition.publisher [ string ]; # 0..1 Name of the publisher (organization or individual)
+  #fhir:ActivityDefinition.description [ markdown ]; # 0..1 Natural language description of the activity definition
+  #fhir:ActivityDefinition.purpose [ markdown ]; # 0..1 Why this activity definition is defined
+  #fhir:ActivityDefinition.usage [ string ]; # 0..1 Describes the clinical usage of the asset
+  #fhir:ActivityDefinition.approvalDate [ date ]; # 0..1 When the activity definition was approved by publisher
+  #fhir:ActivityDefinition.lastReviewDate [ date ]; # 0..1 When the activity definition was last reviewed
+  #fhir:ActivityDefinition.effectivePeriod [ Period ]; # 0..1 When the activity definition is expected to be used
+  #fhir:ActivityDefinition.useContext [ UsageContext ], ... ; # 0..* Context the content is intended to support
+  #fhir:ActivityDefinition.jurisdiction [ CodeableConcept ], ... ; # 0..* Intended jurisdiction for activity definition (if applicable)
+  #fhir:ActivityDefinition.topic [ CodeableConcept ], ... ; # 0..* E.g. Education, Treatment, Assessment, etc
+  #fhir:ActivityDefinition.contributor [ Contributor ], ... ; # 0..* A content contributor
+  #fhir:ActivityDefinition.contact [ ContactDetail ], ... ; # 0..* Contact details for the publisher
+  #fhir:ActivityDefinition.copyright [ markdown ]; # 0..1 Use and/or publishing restrictions
+  #fhir:ActivityDefinition.relatedArtifact [ RelatedArtifact ], ... ; # 0..* Additional documentation, citations, etc
+  #fhir:ActivityDefinition.library [ Reference(Library) ], ... ; # 0..* Logic used by the asset
+  #fhir:ActivityDefinition.kind [ code ]; # 0..1 Kind of resource
+  #fhir:ActivityDefinition.code [ CodeableConcept ]; # 0..1 Detail type of activity
+  ## ActivityDefinition.timing[x] : 0..1 When activity is to occur. One of these 4
+    #fhir:ActivityDefinition.timingTiming [ Timing ]
+    #fhir:ActivityDefinition.timingDateTime [ dateTime ]
+    #fhir:ActivityDefinition.timingPeriod [ Period ]
+    #fhir:ActivityDefinition.timingRange [ Range ]
+  #fhir:ActivityDefinition.location [ Reference(Location) ]; # 0..1 Where it should happen
+  #fhir:ActivityDefinition.participant [ # 0..* Who should participate in the action
+    #fhir:ActivityDefinition.participant.type [ code ]; # 1..1 patient | practitioner | related-person
+    #fhir:ActivityDefinition.participant.role [ CodeableConcept ]; # 0..1 E.g. Nurse, Surgeon, Parent, etc
+  #], ...;
+  ## ActivityDefinition.product[x] : 0..1 What's administered/supplied. One of these 2
+    #fhir:ActivityDefinition.productReference [ Reference(Medication|Substance) ]
+    #fhir:ActivityDefinition.productCodeableConcept [ CodeableConcept ]
+  #fhir:ActivityDefinition.quantity [ Quantity(SimpleQuantity) ]; # 0..1 How much is administered/consumed/supplied
+  #fhir:ActivityDefinition.dosage [ Dosage ], ... ; # 0..* Detailed dosage instructions
+  #fhir:ActivityDefinition.bodySite [ CodeableConcept ], ... ; # 0..* What part of body to perform on
+  #fhir:ActivityDefinition.transform [ Reference(StructureMap) ]; # 0..1 Transform to apply the template
+  #fhir:ActivityDefinition.dynamicValue [ # 0..* Dynamic aspects of the definition
+    #fhir:ActivityDefinition.dynamicValue.description [ string ]; # 0..1 Natural language description of the dynamic value
+    #fhir:ActivityDefinition.dynamicValue.path [ string ]; # 0..1 The path to the element to be set dynamically
+    #fhir:ActivityDefinition.dynamicValue.language [ string ]; # 0..1 Language of the expression
+    #fhir:ActivityDefinition.dynamicValue.expression [ string ]; # 0..1 An expression that provides the dynamic value for the customization
+#  ], ...;
+]

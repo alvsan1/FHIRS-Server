@@ -78,19 +78,19 @@ function addDefinitions(conceptName){
 
   let rawdata = fs.readFileSync("../FHIRS_Client/definitions/"+conceptName+'.json');  
   let objJson = JSON.parse(rawdata);  
-  console.log("*************************************************");
-  console.log(conceptName);  
+  //console.log("*************************************************");
+  //console.log(conceptName);  
   //console.log(objJson.definitions);  
 
   for(var i in objJson.definitions){
     var key = i;
-    console.log(i);
+    //console.log(i);
     let relationJson = JSON.parse(fs.readFileSync("../FHIRS_Client/definitions/"+i+'.json'));
-    console.log(relationJson);
+    //console.log(relationJson);
     if (relationJson.definitions != undefined){
       for (var definition in relationJson.definitions ){
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        console.log(definition)
+        //console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+        //console.log(definition)
         //let definitionJson = JSON.parse(fs.readFileSync("../FHIRS_Client/definitions/"+definition+'.json'));     
             
         objJson.definitions[definition] = relationJson.definitions[definition];
@@ -280,14 +280,14 @@ function addDataType(path){
   //console.log(dataTypeName);
 
   
-  var modelo = require('mongoose').model(dataTypeName).schema;
+  let modelo = require('mongoose').model(dataTypeName).schema;
 
-  var rd = readline.createInterface({
+  let rd = readline.createInterface({
       input: fs.createReadStream(path),
       output: process.stdout,
       console: false
   });
-  var jsonFile = {};
+  let jsonFile = {};
   rd.on('line', function(line) {
       let resultJson = fhirsConceptTurtleToSchemaLine(dataTypeName, modelo, line);
       //jsonFile = Object.assign(jsonFile, resultJson)
@@ -446,10 +446,26 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         jsonObj[result[1]] = valParameter;
         break;
       case /Reference.*/.test(result[2]):
-        //console.log("• Matched Reference");
-        let objectReference = result[2].match((new RegExp("Reference.(.*).")))[1];
-        valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
-        jsonObj[result[1]] = [valParameter];
+        console.log("• Matched Reference");
+        let objectReference = result[2].match(new RegExp("Reference.(.*)."))[1];
+        //console.log(objectReference);
+        refs = objectReference.match(new RegExp("([A-Za-z]*\\|[A-Za-z]*)"));
+        console.log("*****************Refs*******************");
+        console.log(refs);
+        if (refs == null ){
+          valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+          jsonObj[result[1]] = valParameter; 
+
+          schemaParameter = {type: "string"};
+          schemaJson["properties"] = {};
+          schemaJson["properties"][result[1]] = schemaParameter;
+
+        }else{
+        //  refsList = objectReference.split("|")
+        //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
+        //  jsonObj[result[1]] = [valParameter];
+        }
+        console.log(valParameter);
         break;       
       default:
         //console.log("• Didn't match first level");
@@ -547,7 +563,7 @@ app.get('/addParameter', function (req, res, next){
 app.use(router)
 
 app.listen(4000, () => {
-  console.log('Express server listening on port 3000')
+  console.log('Express server listening on port 4000')
 })
 
 

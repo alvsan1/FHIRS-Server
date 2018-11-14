@@ -2,22 +2,22 @@
 
 
 [ a fhir:Organization;
-  fhir:nodeRole fhir:treeRoot; # if this is the parser root
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
 
   # from Resource: .id, .meta, .implicitRules, and .language
   # from DomainResource: .text, .contained, .extension, and .modifierExtension
   fhir:Organization.identifier [ Identifier ], ... ; # 0..* Identifies this organization  across multiple systems
-  fhir:Organization.active [ boolean ]; # 0..1 Whether the organization's record is still in active use
-  fhir:Organization.type [ CodeableConcept ], ... ; # 0..* Kind of organization
-  fhir:Organization.name [ string ]; # 0..1 Name used for the organization
-  fhir:Organization.alias [ string ], ... ; # 0..* A list of alternate names that the organization is known as, or was known as in the past
-#  fhir:Organization.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the organization
-#  fhir:Organization.address [ Address ], ... ; # 0..* An address for the organization
-  fhir:Organization.partOf [ Reference(Organization) ]; # 0..1 The organization of which this organization forms a part
-  fhir:Organization.contact [ # 0..* Contact for the organization for a certain purpose
-    fhir:Organization.contact.purpose [ CodeableConcept ]; # 0..1 The type of contact
-   # fhir:Organization.contact.name [ HumanName ]; # 0..1 A name associated with the contact
-   # fhir:Organization.contact.telecom [ ContactPoint ], ... ; # 0..* Contact details (telephone, email, etc.)  for a contact
+  #fhir:Organization.active [ boolean ]; # 0..1 Whether the organization's record is still in active use
+  #fhir:Organization.type [ CodeableConcept ], ... ; # 0..* Kind of organization
+  #fhir:Organization.name [ string ]; # 0..1 Name used for the organization
+  #fhir:Organization.alias [ string ], ... ; # 0..* A list of alternate names that the organization is known as, or was known as in the past
+##  fhir:Organization.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the organization
+##  fhir:Organization.address [ Address ], ... ; # 0..* An address for the organization
+  #fhir:Organization.partOf [ Reference(Organization) ]; # 0..1 The organization of which this organization forms a part
+  #fhir:Organization.contact [ # 0..* Contact for the organization for a certain purpose
+    #fhir:Organization.contact.purpose [ CodeableConcept ]; # 0..1 The type of contact
+   ## fhir:Organization.contact.name [ HumanName ]; # 0..1 A name associated with the contact
+   ## fhir:Organization.contact.telecom [ ContactPoint ], ... ; # 0..* Contact details (telephone, email, etc.)  for a contact
   #  fhir:Organization.contact.address [ Address ]; # 0..1 Visiting or postal addresses for the contact
   ], ...;
  # fhir:Organization.endpoint [ Reference(Endpoint) ], ... ; # 0..* Technical endpoints providing access to services operated for the organization

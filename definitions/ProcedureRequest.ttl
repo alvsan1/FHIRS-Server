@@ -1,0 +1,43 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:ProcedureRequest;
+  # fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:ProcedureRequest.identifier [ Identifier ], ... ; # 0..* Identifiers assigned to this order
+  #fhir:ProcedureRequest.definition [ Reference(ActivityDefinition|PlanDefinition) ], ... ; # 0..* Protocol or definition
+  #fhir:ProcedureRequest.basedOn [ Reference(Any) ], ... ; # 0..* What request fulfills
+  #fhir:ProcedureRequest.replaces [ Reference(Any) ], ... ; # 0..* What request replaces
+  #fhir:ProcedureRequest.requisition [ Identifier ]; # 0..1 Composite Request ID
+  #fhir:ProcedureRequest.status [ code ]; # 1..1 draft | active | suspended | completed | entered-in-error | cancelled
+  #fhir:ProcedureRequest.intent [ code ]; # 1..1 proposal | plan | order +
+  #fhir:ProcedureRequest.priority [ code ]; # 0..1 routine | urgent | asap | stat
+  #fhir:ProcedureRequest.doNotPerform [ boolean ]; # 0..1 True if procedure should not be performed
+  #fhir:ProcedureRequest.category [ CodeableConcept ], ... ; # 0..* Classification of procedure
+  #fhir:ProcedureRequest.code [ CodeableConcept ]; # 1..1 What is being requested/ordered
+  #fhir:ProcedureRequest.subject [ Reference(Patient|Group|Location|Device) ]; # 1..1 Individual the service is ordered for
+  #fhir:ProcedureRequest.context [ Reference(Encounter|EpisodeOfCare) ]; # 0..1 Encounter or Episode during which request was created
+  ### ProcedureRequest.occurrence[x] : 0..1 When procedure should occur. One of these 3
+    #fhir:ProcedureRequest.occurrenceDateTime [ dateTime ]
+    #fhir:ProcedureRequest.occurrencePeriod [ Period ]
+    #fhir:ProcedureRequest.occurrenceTiming [ Timing ]
+  ### ProcedureRequest.asNeeded[x] : 0..1 Preconditions for procedure or diagnostic. One of these 2
+    #fhir:ProcedureRequest.asNeededBoolean [ boolean ]
+    #fhir:ProcedureRequest.asNeededCodeableConcept [ CodeableConcept ]
+  #fhir:ProcedureRequest.authoredOn [ dateTime ]; # 0..1 Date request signed
+  #fhir:ProcedureRequest.requester [ # 0..1 Who/what is requesting procedure or diagnostic
+    #fhir:ProcedureRequest.requester.agent [ Reference(Device|Practitioner|Organization) ]; # 1..1 Individual making the request
+    #fhir:ProcedureRequest.requester.onBehalfOf [ Reference(Organization) ]; # 0..1 Organization agent is acting for
+  #];
+  #fhir:ProcedureRequest.performerType [ CodeableConcept ]; # 0..1 Performer role
+  #fhir:ProcedureRequest.performer [ Reference(Practitioner|Organization|Patient|Device|RelatedPerson|HealthcareService) ]; # 0..1 Requested perfomer
+  #fhir:ProcedureRequest.reasonCode [ CodeableConcept ], ... ; # 0..* Explanation/Justification for test
+  #fhir:ProcedureRequest.reasonReference [ Reference(Condition|Observation) ], ... ; # 0..* Explanation/Justification for test
+  #fhir:ProcedureRequest.supportingInfo [ Reference(Any) ], ... ; # 0..* Additional clinical information
+  #fhir:ProcedureRequest.specimen [ Reference(Specimen) ], ... ; # 0..* Procedure Samples
+  #fhir:ProcedureRequest.bodySite [ CodeableConcept ], ... ; # 0..* Location on Body
+  #fhir:ProcedureRequest.note [ Annotation ], ... ; # 0..* Comments
+  #fhir:ProcedureRequest.relevantHistory [ Reference(Provenance) ], ... ; # 0..* Request provenance
+]

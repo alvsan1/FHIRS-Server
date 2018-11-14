@@ -6,40 +6,40 @@
 
   # from Resource: .id, .meta, .implicitRules, and .language
   # from DomainResource: .text, .contained, .extension, and .modifierExtension
-  fhir:Specimen.identifier [ Identifier ], ... ; # 0..* External Identifier
-  fhir:Specimen.accessionIdentifier [ Identifier ]; # 0..1 Identifier assigned by the lab
+  #fhir:Specimen.identifier [ Identifier ], ... ; # 0..* External Identifier
+  #fhir:Specimen.accessionIdentifier [ Identifier ]; # 0..1 Identifier assigned by the lab
   fhir:Specimen.status [ code ]; # 0..1 available | unavailable | unsatisfactory | entered-in-error
-  fhir:Specimen.type [ CodeableConcept ]; # 0..1 Kind of material that forms the specimen
-  # fhir:Specimen.subject [ Reference(Patient|Group|Device|Substance) ]; # 1..1 Where the specimen came from. This may be from the patient(s) or from the environment or a device
-  fhir:Specimen.receivedTime [ dateTime ]; # 0..1 The time when specimen was received for processing
-  fhir:Specimen.parent [ Reference(Specimen) ], ... ; # 0..* Specimen from which this specimen originated
-  # fhir:Specimen.request [ Reference(ProcedureRequest) ], ... ; # 0..* Why the specimen was collected
-  fhir:Specimen.collection [ # 0..1 Collection details
-    fhir:Specimen.collection.collector [ Reference(Practitioner) ]; # 0..1 Who collected the specimen
-    # Specimen.collection.collected[x] : 0..1 Collection time. One of these 2
-      fhir:Specimen.collection.collectedDateTime [ dateTime ]
-      fhir:Specimen.collection.collectedPeriod [ Period ]
-   # fhir:Specimen.collection.quantity [ Quantity(SimpleQuantity) ]; # 0..1 The quantity of specimen collected
-    fhir:Specimen.collection.method [ CodeableConcept ]; # 0..1 Technique used to perform collection
-    fhir:Specimen.collection.bodySite [ CodeableConcept ]; # 0..1 Anatomical collection site
-  ];
-  fhir:Specimen.processing [ # 0..* Processing and processing step details
-    fhir:Specimen.processing.description [ string ]; # 0..1 Textual description of procedure
-    fhir:Specimen.processing.procedure [ CodeableConcept ]; # 0..1 Indicates the treatment step  applied to the specimen
-   # fhir:Specimen.processing.additive [ Reference(Substance) ], ... ; # 0..* Material used in the processing step
-    # Specimen.processing.time[x] : 0..1 Date and time of specimen processing. One of these 2
-      fhir:Specimen.processing.timeDateTime [ dateTime ]
-      fhir:Specimen.processing.timePeriod [ Period ]
-  ], ...;
-  fhir:Specimen.container [ # 0..* Direct container of specimen (tube/slide, etc.)
-    fhir:Specimen.container.identifier [ Identifier ], ... ; # 0..* Id for the container
-    fhir:Specimen.container.description [ string ]; # 0..1 Textual description of the container
-    fhir:Specimen.container.type [ CodeableConcept ]; # 0..1 Kind of container directly associated with specimen
-    #fhir:Specimen.container.capacity [ Quantity(SimpleQuantity) ]; # 0..1 Container volume or size
-    f#hir:Specimen.container.specimenQuantity [ Quantity(SimpleQuantity) ]; # 0..1 Quantity of specimen within container
-    # Specimen.container.additive[x] : 0..1 Additive associated with container. One of these 2
-      fhir:Specimen.container.additiveCodeableConcept [ CodeableConcept ]
-     # fhir:Specimen.container.additiveReference [ Reference(Substance) ]
-  ], ...;
-  fhir:Specimen.note [ Annotation ], ... ; # 0..* Comments
+  #fhir:Specimen.type [ CodeableConcept ]; # 0..1 Kind of material that forms the specimen
+  ## fhir:Specimen.subject [ Reference(Patient|Group|Device|Substance) ]; # 1..1 Where the specimen came from. This may be from the patient(s) or from the environment or a device
+  #fhir:Specimen.receivedTime [ dateTime ]; # 0..1 The time when specimen was received for processing
+  #fhir:Specimen.parent [ Reference(Specimen) ], ... ; # 0..* Specimen from which this specimen originated
+  fhir:Specimen.request [ Reference(ProcedureRequest) ], ... ; # 0..* Why the specimen was collected
+  #fhir:Specimen.collection [ # 0..1 Collection details
+    #fhir:Specimen.collection.collector [ Reference(Practitioner) ]; # 0..1 Who collected the specimen
+    ## Specimen.collection.collected[x] : 0..1 Collection time. One of these 2
+      #fhir:Specimen.collection.collectedDateTime [ dateTime ]
+      #fhir:Specimen.collection.collectedPeriod [ Period ]
+   ## fhir:Specimen.collection.quantity [ Quantity(SimpleQuantity) ]; # 0..1 The quantity of specimen collected
+    #fhir:Specimen.collection.method [ CodeableConcept ]; # 0..1 Technique used to perform collection
+    #fhir:Specimen.collection.bodySite [ CodeableConcept ]; # 0..1 Anatomical collection site
+  #];
+  #fhir:Specimen.processing [ # 0..* Processing and processing step details
+    #fhir:Specimen.processing.description [ string ]; # 0..1 Textual description of procedure
+    #fhir:Specimen.processing.procedure [ CodeableConcept ]; # 0..1 Indicates the treatment step  applied to the specimen
+   ## fhir:Specimen.processing.additive [ Reference(Substance) ], ... ; # 0..* Material used in the processing step
+    ## Specimen.processing.time[x] : 0..1 Date and time of specimen processing. One of these 2
+      #fhir:Specimen.processing.timeDateTime [ dateTime ]
+      #fhir:Specimen.processing.timePeriod [ Period ]
+  #], ...;
+  #fhir:Specimen.container [ # 0..* Direct container of specimen (tube/slide, etc.)
+    #fhir:Specimen.container.identifier [ Identifier ], ... ; # 0..* Id for the container
+    #fhir:Specimen.container.description [ string ]; # 0..1 Textual description of the container
+    #fhir:Specimen.container.type [ CodeableConcept ]; # 0..1 Kind of container directly associated with specimen
+    ##fhir:Specimen.container.capacity [ Quantity(SimpleQuantity) ]; # 0..1 Container volume or size
+    #f#hir:Specimen.container.specimenQuantity [ Quantity(SimpleQuantity) ]; # 0..1 Quantity of specimen within container
+    ## Specimen.container.additive[x] : 0..1 Additive associated with container. One of these 2
+      #fhir:Specimen.container.additiveCodeableConcept [ CodeableConcept ]
+     ## fhir:Specimen.container.additiveReference [ Reference(Substance) ]
+  #], ...;
+  #fhir:Specimen.note [ Annotation ], ... ; # 0..* Comments
 ]

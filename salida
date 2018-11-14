@@ -1,0 +1,127 @@
+/
+Express server listening on port 3000
+• Matched Reference
+Specimen
+*****************Refs*******************
+null
+[ { type: { [Function: ObjectId] schemaName: 'ObjectId' },
+    ref: 'Specimen' } ]
+• Matched Reference
+Organization
+*****************Refs*******************
+null
+[ { type: { [Function: ObjectId] schemaName: 'ObjectId' },
+    ref: 'Organization' } ]
+*************************************************
+Annotation
+*************************************************
+CodeableConcept
+Coding
+{ properties: 
+   { version: { type: 'string' },
+     code: { type: 'string' },
+     display: { type: 'string' },
+     userSelected: { type: 'boolean' } },
+  title: 'Coding',
+  type: 'object' }
+*************************************************
+Coding
+*************************************************
+Identifier
+CodeableConcept
+{ properties: 
+   { coding: { '$ref': '#/definitions/Coding', title: 'Coding' },
+     text: { type: 'string' } },
+  definitions: 
+   { Coding: { properties: [Object], title: 'Coding', type: 'object' } },
+  title: 'CodeableConcept',
+  type: 'object' }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Coding
+Period
+{ properties: 
+   { start: { type: 'string', format: 'date' },
+     end: { type: 'string', format: 'date' } },
+  title: 'Period',
+  type: 'object' }
+*************************************************
+Period
+*************************************************
+ActivityDefinition
+*************************************************
+Organization
+Identifier
+{ properties: 
+   { use: { type: 'string', enum: [Array] },
+     type: 
+      { '$ref': '#/definitions/CodeableConcept',
+        title: 'CodeableConcept' },
+     value: { type: 'string' },
+     period: { '$ref': '#/definitions/Period', title: 'Period' } },
+  definitions: 
+   { CodeableConcept: 
+      { properties: [Object],
+        title: 'CodeableConcept',
+        type: 'object' },
+     Period: { properties: [Object], title: 'Period', type: 'object' },
+     Coding: { properties: [Object], title: 'Coding', type: 'object' } },
+  title: 'Identifier',
+  type: 'object' }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CodeableConcept
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Period
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Coding
+*************************************************
+PlanDefinition
+*************************************************
+ProcedureRequest
+Identifier
+{ properties: 
+   { use: { type: 'string', enum: [Array] },
+     type: 
+      { '$ref': '#/definitions/CodeableConcept',
+        title: 'CodeableConcept' },
+     value: { type: 'string' },
+     period: { '$ref': '#/definitions/Period', title: 'Period' } },
+  definitions: 
+   { CodeableConcept: 
+      { properties: [Object],
+        title: 'CodeableConcept',
+        type: 'object' },
+     Period: { properties: [Object], title: 'Period', type: 'object' },
+     Coding: { properties: [Object], title: 'Coding', type: 'object' } },
+  title: 'Identifier',
+  type: 'object' }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CodeableConcept
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Period
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Coding
+*************************************************
+Specimen
+Identifier
+{ properties: 
+   { use: { type: 'string', enum: [Array] },
+     type: 
+      { '$ref': '#/definitions/CodeableConcept',
+        title: 'CodeableConcept' },
+     value: { type: 'string' },
+     period: { '$ref': '#/definitions/Period', title: 'Period' } },
+  definitions: 
+   { CodeableConcept: 
+      { properties: [Object],
+        title: 'CodeableConcept',
+        type: 'object' },
+     Period: { properties: [Object], title: 'Period', type: 'object' },
+     Coding: { properties: [Object], title: 'Coding', type: 'object' } },
+  title: 'Identifier',
+  type: 'object' }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+CodeableConcept
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Period
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Coding
