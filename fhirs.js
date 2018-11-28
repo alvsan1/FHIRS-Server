@@ -213,6 +213,7 @@ function addConcept(path){
   });
 
   var jsonFile = {};
+  var uiFile = {};
   rd.on('line', function(line) {
       let resultJson = fhirsConceptTurtleToSchemaLine(conceptName, modelo, line);
       /*console.log((resultJson != undefined) ? resultJson : "Result null ");
@@ -245,8 +246,22 @@ function addConcept(path){
           }
           //console.log("****************" +"definitions" +"**********************************");          
         }
+
+        //Add 
+        if (resultJson.ui  != undefined ){
+          if (resultJson.ui.length == 0 ){
+            
+          } 
+          ///////////REVISA SI YA TENIA UNA DEFINICIONES /////////////////////////////
+          if ( uiFile != undefined ){
+            Object.assign(uiFile , resultJson.ui);
+          }else{
+            uiFile = resultJson.ui;
+          }
+          //console.log("****************" +"definitions" +"**********************************");          
+        }
         //console.log("****************" +"definitions" +"**********************************");          
-        //console.log(jsonFile)
+        //console.log(jsonFile)d
       }
   });
 
@@ -255,11 +270,13 @@ function addConcept(path){
     //console.log(jsonFile);
     jsonFile = Object.assign(jsonFile, {title: conceptName, type: "object"})
 
-
     'use strict';
     let data = JSON.stringify(jsonFile);  
     fs.writeFileSync("../FHIRS_Client/definitions/"+conceptName+'.json', data);
     //process.exit(0);
+
+    let dataUi = JSON.stringify(uiFile);  
+    fs.writeFileSync("../FHIRS_Client/ui/"+conceptName+'.json', dataUi);
 
     var server = restify.serve(router, mongoose.model(conceptName, modelo), options)
 
@@ -453,17 +470,76 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         console.log("*****************Refs*******************");
         console.log(refs);
         if (refs == null ){
-          valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+          valParameter = { type: Schema.Types.ObjectId, ref: objectReference }
           jsonObj[result[1]] = valParameter; 
 
+
+/*
           schemaParameter = {type: "string"};
           schemaJson["properties"] = {};
           schemaJson["properties"][result[1]] = schemaParameter;
+
+          let optionsAutocomplete;
+          let autocomplete = {"ui:field": "asyncTypeahead",
+                                "asyncTypeahead": {
+                                  "url": "http://192.168.56.1:4000/api/v/specimen?select=id",
+                                  isLoading: false,
+                                  options : optionsAutocomplete,
+                                  labelKey: "_id",
+                                  mapping: "_id"
+                                }      
+                              };
+          schemaJson["ui"] = {};
+          schemaJson["ui"][result[1]] = autocomplete;
+
+*/
+          schemaParameter = { type: "string"};
+          schemaJson["properties"] = {};
+          schemaJson["properties"][result[1]] = schemaParameter;
+
+          let optionsAutocomplete;
+          let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
+          //let paramMaps = result[1] + "_id";
+          let autocomplete = {"ui:field": "asyncTypeahead",
+                                "asyncTypeahead": {
+                                  "url": "http://192.168.56.1:4000/api/v/" + domRequest + "?select=id",
+                                  isLoading: false,
+                                  options : optionsAutocomplete,
+                                  labelKey: "_id",
+                                  mapping: "_id"
+                                }      
+                              };
+          /*autocomplete["asyncTypeahead"]["mapping"] = {}
+          autocomplete["asyncTypeahead"]["mapping"][paramMaps] = "_id";*/
+          schemaJson["ui"] = {};
+          schemaJson["ui"][result[1]] = autocomplete;
+
 
         }else{
         //  refsList = objectReference.split("|")
         //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
         //  jsonObj[result[1]] = [valParameter];
+            valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+          jsonObj[result[1]] = valParameter; 
+
+          schemaParameter = {type: "string"};
+          schemaJson["properties"] = {};
+          schemaJson["properties"][result[1]] = { "type": "array",
+      "title": result[1], items: schemaParameter };
+
+          let optionsAutocomplete;
+          let autocomplete = {"ui:field": "asyncTypeahead",
+                                "asyncTypeahead": {
+                                  "url": "http://192.168.56.1:4000/api/v/specimen?select=id",
+                                  isLoading: false,
+                                  options : optionsAutocomplete,
+                                  labelKey: "_id"
+                                }      
+                              };
+          schemaJson["ui"] = {};
+          schemaJson["ui"][result[1]] = autocomplete;
+
+
         }
         console.log(valParameter);
         break;       

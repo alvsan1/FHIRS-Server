@@ -6,17 +6,17 @@
 
   # from Resource: .id, .meta, .implicitRules, and .language
   # from DomainResource: .text, .contained, .extension, and .modifierExtension
-  fhir:ProcedureRequest.identifier [ Identifier ], ... ; # 0..* Identifiers assigned to this order
+  #fhir:ProcedureRequest.identifier [ Identifier ], ... ; # 0..* Identifiers assigned to this order
   #fhir:ProcedureRequest.definition [ Reference(ActivityDefinition|PlanDefinition) ], ... ; # 0..* Protocol or definition
   #fhir:ProcedureRequest.basedOn [ Reference(Any) ], ... ; # 0..* What request fulfills
   #fhir:ProcedureRequest.replaces [ Reference(Any) ], ... ; # 0..* What request replaces
   #fhir:ProcedureRequest.requisition [ Identifier ]; # 0..1 Composite Request ID
-  #fhir:ProcedureRequest.status [ code ]; # 1..1 draft | active | suspended | completed | entered-in-error | cancelled
-  #fhir:ProcedureRequest.intent [ code ]; # 1..1 proposal | plan | order +
+  fhir:ProcedureRequest.status [ code ]; # 1..1 draft | active | suspended | completed | entered-in-error | cancelled
+  fhir:ProcedureRequest.intent [ code ]; # 1..1 proposal | plan | order +
   #fhir:ProcedureRequest.priority [ code ]; # 0..1 routine | urgent | asap | stat
   #fhir:ProcedureRequest.doNotPerform [ boolean ]; # 0..1 True if procedure should not be performed
   #fhir:ProcedureRequest.category [ CodeableConcept ], ... ; # 0..* Classification of procedure
-  #fhir:ProcedureRequest.code [ CodeableConcept ]; # 1..1 What is being requested/ordered
+  fhir:ProcedureRequest.code [ CodeableConcept ]; # 1..1 What is being requested/ordered
   #fhir:ProcedureRequest.subject [ Reference(Patient|Group|Location|Device) ]; # 1..1 Individual the service is ordered for
   #fhir:ProcedureRequest.context [ Reference(Encounter|EpisodeOfCare) ]; # 0..1 Encounter or Episode during which request was created
   ### ProcedureRequest.occurrence[x] : 0..1 When procedure should occur. One of these 3
