@@ -469,33 +469,87 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         refs = objectReference.match(new RegExp("([A-Za-z]*\\|[A-Za-z]*)"));
         console.log("*****************Refs*******************");
         console.log(refs);
+
         if (refs == null ){
-          valParameter = { type: Schema.Types.ObjectId, ref: objectReference }
-          jsonObj[result[1]] = valParameter; 
+          let autocomplete = {};
+          if ( result[3] == ", ..."){
+                        valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+            jsonObj[result[1]] = valParameter; 
 
 
-/*
-          schemaParameter = {type: "string"};
-          schemaJson["properties"] = {};
-          schemaJson["properties"][result[1]] = schemaParameter;
+            //Create the Schema client
+            schemaParameter = {type: "string"};
+            schemaJson["properties"] = {};
+            schemaJson["properties"][result[1]] = { "type": "array",
+                                                    "title": result[1], 
+                                                    items: schemaParameter };
 
-          let optionsAutocomplete;
-          let autocomplete = {"ui:field": "asyncTypeahead",
-                                "asyncTypeahead": {
-                                  "url": "http://192.168.56.1:4000/api/v/specimen?select=id",
-                                  isLoading: false,
-                                  options : optionsAutocomplete,
-                                  labelKey: "_id",
-                                  mapping: "_id"
-                                }      
-                              };
+
+
+
+            //Create the UI Schema 
+            let optionsAutocomplete;
+            let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
+            //let paramMaps = result[1] + "_id";
+            autocomplete = { items: {"ui:field": "asyncTypeahead",
+                                          "asyncTypeahead": {
+                                            "url": "http://192.168.56.1:4000/api/v/" + domRequest + "?select=id",
+                                            isLoading: false,
+                                            options : optionsAutocomplete,
+                                            labelKey: "_id",
+                                            mapping: "_id"
+                                          }
+                                        }
+                                      };
+            
+          }else{
+            //Create the schema server          
+            valParameter = { type: Schema.Types.ObjectId, ref: objectReference }
+            jsonObj[result[1]] = valParameter;
+
+            //Create the Schema client
+            schemaParameter = { type: "string"};
+            schemaJson["properties"] = {};
+            schemaJson["properties"][result[1]] = schemaParameter;
+
+            //Create the UI Schema 
+            let optionsAutocomplete;
+            let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
+            //let paramMaps = result[1] + "_id";
+            autocomplete = {"ui:field": "asyncTypeahead",
+                                  "asyncTypeahead": {
+                                    "url": "http://192.168.56.1:4000/api/v/" + domRequest + "?select=id",
+                                    isLoading: false,
+                                    options : optionsAutocomplete,
+                                    labelKey: "_id",
+                                    mapping: "_id"
+                                  }      
+                                };
+
+          }
+
+          
+          
           schemaJson["ui"] = {};
           schemaJson["ui"][result[1]] = autocomplete;
 
-*/
-          schemaParameter = { type: "string"};
+
+        }else{
+        //  refsList = objectReference.split("|")
+        //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
+        //  jsonObj[result[1]] = [valParameter];
+
+          //Create the schema server
+          valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+          jsonObj[result[1]] = valParameter; 
+
+
+          //Create the Schema client
+          schemaParameter = {type: "string"};
           schemaJson["properties"] = {};
-          schemaJson["properties"][result[1]] = schemaParameter;
+          schemaJson["properties"][result[1]] = { "type": "array",
+                                                  "title": result[1], 
+                                                  items: schemaParameter };
 
           let optionsAutocomplete;
           let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
@@ -514,34 +568,8 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           schemaJson["ui"] = {};
           schemaJson["ui"][result[1]] = autocomplete;
 
-
-        }else{
-        //  refsList = objectReference.split("|")
-        //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
-        //  jsonObj[result[1]] = [valParameter];
-            valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
-          jsonObj[result[1]] = valParameter; 
-
-          schemaParameter = {type: "string"};
-          schemaJson["properties"] = {};
-          schemaJson["properties"][result[1]] = { "type": "array",
-      "title": result[1], items: schemaParameter };
-
-          let optionsAutocomplete;
-          let autocomplete = {"ui:field": "asyncTypeahead",
-                                "asyncTypeahead": {
-                                  "url": "http://192.168.56.1:4000/api/v/specimen?select=id",
-                                  isLoading: false,
-                                  options : optionsAutocomplete,
-                                  labelKey: "_id"
-                                }      
-                              };
-          schemaJson["ui"] = {};
-          schemaJson["ui"][result[1]] = autocomplete;
-
-
         }
-        console.log(valParameter);
+        //console.log(valParameter);
         break;       
       default:
         //console.log("• Didn't match first level");
