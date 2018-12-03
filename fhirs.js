@@ -214,6 +214,8 @@ function addConcept(path){
 
   var jsonFile = {};
   var uiFile = {};
+  var rulesFile = {};
+
   rd.on('line', function(line) {
       let resultJson = fhirsConceptTurtleToSchemaLine(conceptName, modelo, line);
       /*console.log((resultJson != undefined) ? resultJson : "Result null ");
@@ -276,6 +278,20 @@ function addConcept(path){
         }
         //console.log("****************" +"definitions" +"**********************************");          
         //console.log(jsonFile)d
+
+        if (resultJson.rules  != undefined ){
+          if (resultJson.rules.length == 0 ){
+            
+          } 
+          ///////////REVISA SI YA TENIA UNA DEFINICIONES /////////////////////////////
+          if ( rulesFile != undefined ){
+            Object.assign(rulesFile , resultJson.rules);
+          }else{
+            rulesFile = resultJson.rules;
+          }
+          //console.log("****************" +"definitions" +"**********************************");          
+        }
+
       }
   });
 
@@ -291,6 +307,10 @@ function addConcept(path){
 
     let dataUi = JSON.stringify(uiFile);  
     fs.writeFileSync("../FHIRS_Client/ui/"+conceptName+'.json', dataUi);
+
+
+    let dataRules = JSON.stringify(rulesFile);  
+    fs.writeFileSync("../FHIRS_Client/rules/"+conceptName+'.json', dataRules);
 
     var server = restify.serve(router, mongoose.model(conceptName, modelo), options)
 
@@ -609,7 +629,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           //dependencies["dynamicModelType"] = oneOfDp; 
 //          schemaJson["dependencies"] = dependencies;
 
-
+          //Rules
 
           schemaParameter = { type: "string"};         
           schemaJson["properties"][result[1]] = schemaParameter;
