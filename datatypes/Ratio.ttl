@@ -1,0 +1,7 @@
+@prefix fhir: <http://hl7.org/fhir/> 
+
+[
+ # from Element: Element.extension
+  fhir:Ratio.numerator [ Quantity ]; # 0..1 Numerator value
+  fhir:Ratio.denominator [ Quantity ]; # 0..1 Denominator value
+]

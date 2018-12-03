@@ -1,4 +1,4 @@
-@prefix fhir: <http://hl7.org/fhir/> .doco
+@prefix fhir: <http://hl7.org/fhir/> 
 
 
 [ a fhir:Specimen;
@@ -10,7 +10,7 @@
   #fhir:Specimen.accessionIdentifier [ Identifier ]; # 0..1 Identifier assigned by the lab
   fhir:Specimen.status [ code ]; # 0..1 available | unavailable | unsatisfactory | entered-in-error
   #fhir:Specimen.type [ CodeableConcept ]; # 0..1 Kind of material that forms the specimen
-  ## fhir:Specimen.subject [ Reference(Patient|Group|Device|Substance) ]; # 1..1 Where the specimen came from. This may be from the patient(s) or from the environment or a device
+  fhir:Specimen.subject [ Reference(Patient|Group|Device|Substance) ]; # 1..1 Where the specimen came from. This may be from the patient(s) or from the environment or a device
   #fhir:Specimen.receivedTime [ dateTime ]; # 0..1 The time when specimen was received for processing
   #fhir:Specimen.parent [ Reference(Specimen) ], ... ; # 0..* Specimen from which this specimen originated
   fhir:Specimen.request [ Reference(ProcedureRequest) ], ... ; # 0..* Why the specimen was collected

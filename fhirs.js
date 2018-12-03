@@ -247,7 +247,21 @@ function addConcept(path){
           //console.log("****************" +"definitions" +"**********************************");          
         }
 
-        //Add 
+        //Add Dependecies Schema
+        if (resultJson.dependencies  != undefined ){
+          if (resultJson.dependencies.length == 0 ){
+            
+          } 
+          ///////////REVISA SI YA TENIA UNA DEFINICIONES /////////////////////////////
+          if ( jsonFile.dependencies != undefined ){
+            Object.assign(jsonFile.dependencies , resultJson.dependencies);
+          }else{
+            jsonFile.dependencies = resultJson.dependencies;
+          }
+          //console.log("****************" +"definitions" +"**********************************");          
+        }
+
+        //Add UI Schema
         if (resultJson.ui  != undefined ){
           if (resultJson.ui.length == 0 ){
             
@@ -446,6 +460,22 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         schemaJson["properties"] = {};
         schemaJson["properties"][result[1]] = schemaParameter;
         break;
+      case /decimal/.test(result[2]):
+        //console.log("• Matched code string");
+        if ( result[3] == ", ..."){
+          valParameter = {type: Number};
+          schemaParameter = {type: "array",
+                             itmes: {type: "number"
+                           }};
+        }else{
+          valParameter = {type: Number};
+          schemaParameter = {type: "number"};
+        }
+        
+        jsonObj[result[1]] = valParameter;
+        schemaJson["properties"] = {};
+        schemaJson["properties"][result[1]] = schemaParameter;
+        break;
       case /dateTime/.test(result[2]):
         //console.log("• Matched code string");
         valParameter = {type: Date};
@@ -535,39 +565,74 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
 
 
         }else{
-        //  refsList = objectReference.split("|")
+            
         //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
         //  jsonObj[result[1]] = [valParameter];
 
           //Create the schema server
-          valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+          //valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
+
+          let listRefs = objectReference.split("|")
+
+          valParameter = { type: Schema.Types.ObjectId, refPath: 'dynamicModelType'};
           jsonObj[result[1]] = valParameter; 
 
+          let dmType = { type: String, enum:  listRefs };
+          jsonObj["dynamicModelType"] = dmType;
 
           //Create the Schema client
-          schemaParameter = {type: "string"};
+          schemaDynamicParameter = {type: "string", enum: listRefs};
           schemaJson["properties"] = {};
-          schemaJson["properties"][result[1]] = { "type": "array",
-                                                  "title": result[1], 
-                                                  items: schemaParameter };
+          schemaJson["properties"]["dynamicModelType"] = schemaDynamicParameter;
 
+          //Dynamic Parameter
+          //schemaJson["properties"]["dynamicModelType"]["onChange"] = onChangeDynamic;
+
+          //Dependencies
+          //let dependencies = {};
+          //let listDependecies = [];
+          //let indixDp = 0;
+          //for ( let dp in listRefs ){ 
+            //let nodeDp = {"properties": { 
+                //"dynamicModelType": {
+                    //"enum": [ listRefs[dp] ]
+                //}
+              //}
+            //}
+            //nodeDp["properties"][result[1]] =  { type: "string"};
+            //listDependecies[indixDp] = nodeDp;
+            //indixDp++;  
+          //}
+//
+          //let oneOfDp = {};
+          //oneOfDp["oneOf"] = listDependecies;
+          //dependencies["dynamicModelType"] = oneOfDp; 
+//          schemaJson["dependencies"] = dependencies;
+
+
+
+          schemaParameter = { type: "string"};         
+          schemaJson["properties"][result[1]] = schemaParameter;
+          
+         
+          //Create the UI Schema 
+          //Create the UI Schema 
           let optionsAutocomplete;
-          let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
+
+          //let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
           //let paramMaps = result[1] + "_id";
-          let autocomplete = {"ui:field": "asyncTypeahead",
-                                "asyncTypeahead": {
-                                  "url": "http://192.168.56.1:4000/api/v/" + domRequest + "?select=id",
+          autocomplete = { "ui:field": "asyncTypeahead",
+                                "asyncTypeahead": {                                  
                                   isLoading: false,
                                   options : optionsAutocomplete,
                                   labelKey: "_id",
-                                  mapping: "_id"
-                                }      
+                                  mapping: "_id",
+                                  //onChange: "dynamicModelType"
+                                }
                               };
-          /*autocomplete["asyncTypeahead"]["mapping"] = {}
-          autocomplete["asyncTypeahead"]["mapping"][paramMaps] = "_id";*/
+
           schemaJson["ui"] = {};
           schemaJson["ui"][result[1]] = autocomplete;
-
         }
         //console.log(valParameter);
         break;       

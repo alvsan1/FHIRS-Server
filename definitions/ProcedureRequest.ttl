@@ -17,7 +17,7 @@
   #fhir:ProcedureRequest.doNotPerform [ boolean ]; # 0..1 True if procedure should not be performed
   #fhir:ProcedureRequest.category [ CodeableConcept ], ... ; # 0..* Classification of procedure
   fhir:ProcedureRequest.code [ CodeableConcept ]; # 1..1 What is being requested/ordered
-  #fhir:ProcedureRequest.subject [ Reference(Patient|Group|Location|Device) ]; # 1..1 Individual the service is ordered for
+  fhir:ProcedureRequest.subject [ Reference(Patient|Group|Location|Device) ]; # 1..1 Individual the service is ordered for
   #fhir:ProcedureRequest.context [ Reference(Encounter|EpisodeOfCare) ]; # 0..1 Encounter or Episode during which request was created
   ### ProcedureRequest.occurrence[x] : 0..1 When procedure should occur. One of these 3
     #fhir:ProcedureRequest.occurrenceDateTime [ dateTime ]

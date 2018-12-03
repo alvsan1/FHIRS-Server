@@ -1,0 +1,24 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[ a fhir:Substance;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+#
+  ## from Resource: .id, .meta, .implicitRules, and .language
+  ## from DomainResource: .text, .contained, .extension, and .modifierExtension
+  #fhir:Substance.identifier [ Identifier ], ... ; # 0..* Unique identifier
+  fhir:Substance.status [ code ]; # 0..1 active | inactive | entered-in-error
+  #fhir:Substance.category [ CodeableConcept ], ... ; # 0..* What class/type of substance this is
+  #fhir:Substance.code [ CodeableConcept ]; # 1..1 What substance this is
+  fhir:Substance.description [ string ]; # 0..1 Textual description of the substance, comments
+  #fhir:Substance.instance [ # 0..* If this describes a specific package/container of the substance
+    #fhir:Substance.instance.identifier [ Identifier ]; # 0..1 Identifier of the package/container
+    #fhir:Substance.instance.expiry [ dateTime ]; # 0..1 When no longer valid to use
+    #fhir:Substance.instance.quantity [ Quantity(SimpleQuantity) ]; # 0..1 Amount of substance in the package
+  #], ...;
+  #fhir:Substance.ingredient [ # 0..* Composition information about the substance
+    fhir:Substance.ingredient.quantity [ Ratio ]; # 0..1 Optional amount (concentration)
+    ## Substance.ingredient.substance[x] : 1..1 A component of the substance. One of these 2
+      fhir:Substance.ingredient.substanceCodeableConcept [ CodeableConcept ]
+      fhir:Substance.ingredient.substanceReference [ Reference(Substance) ]
+  #], ...;
+]
