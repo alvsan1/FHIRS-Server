@@ -677,8 +677,6 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             ruleConcept["conditions"] = parameterCond;
 
 
-            //let eventCond = {};
-            //eventCond["type"] = "uiAppend";
             let conceptURL = element[0].toLowerCase() + element.substring(1)
             let ruteURL = "http://192.168.56.1:4000/api/v/"+conceptURL+"?select=id";            
             let parameterEvent = {};
