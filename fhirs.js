@@ -214,7 +214,7 @@ function addConcept(path){
 
   var jsonFile = {};
   var uiFile = {};
-  var rulesFile = {};
+  var rulesFile = [];
 
   rd.on('line', function(line) {
       let resultJson = fhirsConceptTurtleToSchemaLine(conceptName, modelo, line);
@@ -289,6 +289,10 @@ function addConcept(path){
           }else{
             rulesFile = resultJson.rules;
           }
+          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
+          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
+          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
+          console.log(resultJson.rules);
           //console.log("****************" +"definitions" +"**********************************");          
         }
 
@@ -308,8 +312,15 @@ function addConcept(path){
     let dataUi = JSON.stringify(uiFile);  
     fs.writeFileSync("../FHIRS_Client/ui/"+conceptName+'.json', dataUi);
 
-
-    let dataRules = JSON.stringify(rulesFile);  
+    console.log("*************RULESSSSSSSSSSSSSSSS****************");
+    console.log("*************RULESSSSSSSSSSSSSSSS****************");
+    console.log("*************RULESSSSSSSSSSSSSSSS****************");
+    console.log(rulesFile);
+    let dataRules = JSON.stringify(rulesFile); 
+    console.log("*************RULESSSSSSSSSSSSSSSS****************");
+    console.log("*************RULESSSSSSSSSSSSSSSS****************");
+    console.log("*************RULESSSSSSSSSSSSSSSS****************");
+    console.log(dataRules); 
     fs.writeFileSync("../FHIRS_Client/rules/"+conceptName+'.json', dataRules);
 
     var server = restify.serve(router, mongoose.model(conceptName, modelo), options)
@@ -653,6 +664,32 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
 
           schemaJson["ui"] = {};
           schemaJson["ui"][result[1]] = autocomplete;
+
+          
+
+          //Create rules 
+          let rules = [];
+          listRefs.forEach( function(element){
+
+            let parameterCond = {};
+            parameterCond["dynamicModelType"] = { "is": element };
+            let ruleConcept = {};          
+            ruleConcept["conditions"] = parameterCond;
+
+
+            //let eventCond = {};
+            //eventCond["type"] = "uiAppend";
+            let conceptURL = element[0].toLowerCase() + element.substring(1)
+            let ruteURL = "http://192.168.56.1:4000/api/v/"+conceptURL+"?select=id";            
+            let parameterEvent = {};
+            parameterEvent[result[1]] = { "asyncTypeahead": { "url": ruteURL}}; 
+            ruleConcept["event"] = { "type": "uiAppend", "params": parameterEvent};
+
+            rules.push(ruleConcept);
+          });
+
+          schemaJson["rules"] = rules;
+
         }
         //console.log(valParameter);
         break;       
