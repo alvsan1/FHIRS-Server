@@ -7,10 +7,13 @@ const app = express()
 const router = express.Router()
 const cors = require('cors');
 const jsonld = require('jsonld');
+const fetch = require('node-fetch');
+
 
 app.use(bodyParser.json())
 app.use(methodOverride())
 app.use(cors())
+
 
 
 
@@ -204,12 +207,12 @@ function addConcept(path){
       let context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
       
 
-      console.log(req.erm.result);
+      //console.log(req.erm.result);
       let compacted = JSON.parse(JSON.stringify(req.erm.result));
       compacted["@context"]= context;
       compacted["@type"]= "fhir:Specimen";
-      console.log(Array(req.erm.result))
-      compacted["@id"]= "fhir:Specimen"+Array(req.erm.result)[0]["_id"];
+      //console.log(Array(req.erm.result))
+      compacted["@id"]= "fhir:Specimen#"+Array(req.erm.result)[0]["_id"];
 
 
       console.log(compacted);
@@ -224,8 +227,21 @@ function addConcept(path){
         */
         console.log(JSON.stringify(expanded));
 
+        fetch("http://192.168.56.2:8080/rdf4j-server/repositories/fhir/statements", {
+          method: 'post',
+          headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': "application/ld+json;charset=UTF-8"
+        },
+          body: JSON.stringify(expanded)})
+        .then(response => response)
+        .then(jsondata => {
+          console.log(jsondata);
+          //this.setState({ text: jsondata.text });
+                 });
 
-        
+
+
 
       });
 
