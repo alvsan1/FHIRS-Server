@@ -1,0 +1,13 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:Attachment.contentType [ code ]; # 0..1 Mime type of the content, with charset etc.
+  fhir:Attachment.language [ code ]; # 0..1 Human language of the content (BCP-47)
+  #fhir:Attachment.data [ base64Binary ]; # 0..1 Data inline, base64ed
+  fhir:Attachment.url [ uri ]; # 0..1 Uri where the data can be found
+  #fhir:Attachment.size [ unsignedInt ]; # 0..1 Number of bytes of content (if url provided)
+  #fhir:Attachment.hash [ base64Binary ]; # 0..1 Hash of the data (sha-1, base64ed)
+  fhir:Attachment.title [ string ]; # 0..1 Label to display in place of the data
+  fhir:Attachment.creation [ dateTime ]; # 0..1 Date attachment was first created
+]

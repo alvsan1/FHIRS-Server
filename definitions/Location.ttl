@@ -1,0 +1,27 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[ a fhir:Location;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Location.identifier [ Identifier ], ... ; # 0..* Unique code or number identifying the location to its users
+  fhir:Location.status [ code ]; # 0..1 active | suspended | inactive
+  fhir:Location.operationalStatus [ Coding ]; # 0..1 The Operational status of the location (typically only for a bed/room)
+  fhir:Location.name [ string ]; # 0..1 Name of the location as used by humans
+  fhir:Location.alias [ string ], ... ; # 0..* A list of alternate names that the location is known as, or was known as in the past
+  fhir:Location.description [ string ]; # 0..1 Additional details about the location that could be displayed as further information to identify the location beyond its name
+  fhir:Location.mode [ code ]; # 0..1 instance | kind
+  fhir:Location.type [ CodeableConcept ]; # 0..1 Type of function performed
+  fhir:Location.telecom [ ContactPoint ], ... ; # 0..* Contact details of the location
+  fhir:Location.address [ Address ]; # 0..1 Physical location
+  fhir:Location.physicalType [ CodeableConcept ]; # 0..1 Physical form of the location
+  fhir:Location.position [ # 0..1 The absolute geographic location
+    fhir:Location.position.longitude [ decimal ]; # 1..1 Longitude with WGS84 datum
+    fhir:Location.position.latitude [ decimal ]; # 1..1 Latitude with WGS84 datum
+    fhir:Location.position.altitude [ decimal ]; # 0..1 Altitude with WGS84 datum
+  ];
+  fhir:Location.managingOrganization [ Reference(Organization) ]; # 0..1 Organization responsible for provisioning and upkeep
+  fhir:Location.partOf [ Reference(Location) ]; # 0..1 Another Location this one is physically part of
+  fhir:Location.endpoint [ Reference(Endpoint) ], ... ; # 0..* Technical endpoints providing access to services operated for the location
+]

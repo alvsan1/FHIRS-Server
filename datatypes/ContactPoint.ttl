@@ -1,0 +1,10 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[
+ # from Element: Element.extension
+  fhir:ContactPoint.system [ code ]; # 0..1 phone | fax | email | pager | url | sms | other
+  fhir:ContactPoint.value [ string ]; # 0..1 The actual contact point details
+  fhir:ContactPoint.use [ code ]; # 0..1 home | work | temp | old | mobile - purpose of this contact point
+  fhir:ContactPoint.rank [ positiveInt ]; # 0..1 Specify preferred order of use (1 = highest)
+  fhir:ContactPoint.period [ Period ]; # 0..1 Time period when the contact point was/is in use
+]

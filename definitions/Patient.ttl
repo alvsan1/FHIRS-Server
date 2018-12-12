@@ -1,0 +1,47 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[ a fhir:Patient;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Patient.identifier [ Identifier ], ... ; # 0..* An identifier for this patient
+  fhir:Patient.active [ boolean ]; # 0..1 Whether this patient's record is in active use
+  fhir:Patient.name [ HumanName ], ... ; # 0..* A name associated with the patient
+  fhir:Patient.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the individual
+  fhir:Patient.gender [ code ]; # 0..1 male | female | other | unknown
+  fhir:Patient.birthDate [ date ]; # 0..1 The date of birth for the individual
+  # Patient.deceased[x] : 0..1 Indicates if the individual is deceased or not. One of these 2
+    fhir:Patient.deceasedBoolean [ boolean ]
+    fhir:Patient.deceasedDateTime [ dateTime ]
+  fhir:Patient.address [ Address ], ... ; # 0..* Addresses for the individual
+  fhir:Patient.maritalStatus [ CodeableConcept ]; # 0..1 Marital (civil) status of a patient
+  # Patient.multipleBirth[x] : 0..1 Whether patient is part of a multiple birth. One of these 2
+    fhir:Patient.multipleBirthBoolean [ boolean ]
+    fhir:Patient.multipleBirthInteger [ integer ]
+  fhir:Patient.photo [ Attachment ], ... ; # 0..* Image of the patient
+  fhir:Patient.contact [ # 0..* A contact party (e.g. guardian, partner, friend) for the patient
+    fhir:Patient.contact.relationship [ CodeableConcept ], ... ; # 0..* The kind of relationship
+    fhir:Patient.contact.name [ HumanName ]; # 0..1 A name associated with the contact person
+    fhir:Patient.contact.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the person
+    fhir:Patient.contact.address [ Address ]; # 0..1 Address for the contact person
+    fhir:Patient.contact.gender [ code ]; # 0..1 male | female | other | unknown
+    fhir:Patient.contact.organization [ Reference(Organization) ]; # 0..1 Organization that is associated with the contact
+    fhir:Patient.contact.period [ Period ]; # 0..1 The period during which this contact person or organization is valid to be contacted relating to this patient
+  ], ...;
+  fhir:Patient.animal [ # 0..1 This patient is known to be an animal (non-human)
+    fhir:Patient.animal.species [ CodeableConcept ]; # 1..1 E.g. Dog, Cow
+    fhir:Patient.animal.breed [ CodeableConcept ]; # 0..1 E.g. Poodle, Angus
+    fhir:Patient.animal.genderStatus [ CodeableConcept ]; # 0..1 E.g. Neutered, Intact
+  ];
+  fhir:Patient.communication [ # 0..* A list of Languages which may be used to communicate with the patient about his or her health
+    fhir:Patient.communication.language [ CodeableConcept ]; # 1..1 The language which can be used to communicate with the patient about his or her health
+    fhir:Patient.communication.preferred [ boolean ]; # 0..1 Language preference indicator
+  ], ...;
+  #fhir:Patient.generalPractitioner [ Reference(Organization|Practitioner) ], ... ; # 0..* Patient's nominated primary care provider
+  fhir:Patient.managingOrganization [ Reference(Organization) ]; # 0..1 Organization that is the custodian of the patient record
+  fhir:Patient.link [ # 0..* Link to another patient resource that concerns the same actual person
+    #fhir:Patient.link.other [ Reference(Patient|RelatedPerson) ]; # 1..1 The other patient or related person resource that the link refers to
+    fhir:Patient.link.type [ code ]; # 1..1 replaced-by | replaces | refer | seealso - type of link
+  ], ...;
+]

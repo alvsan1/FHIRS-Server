@@ -1,0 +1,34 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:Device;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Device.identifier [ Identifier ], ... ; # 0..* Instance identifier
+  fhir:Device.udi [ # 0..1 Unique Device Identifier (UDI) Barcode string
+    fhir:Device.udi.deviceIdentifier [ string ]; # 0..1 Mandatory fixed portion of UDI
+    fhir:Device.udi.name [ string ]; # 0..1 Device Name as appears on UDI label
+    fhir:Device.udi.jurisdiction [ uri ]; # 0..1 Regional UDI authority
+    fhir:Device.udi.carrierHRF [ string ]; # 0..1 UDI Human Readable Barcode String
+    #fhir:Device.udi.carrierAIDC [ base64Binary ]; # 0..1 UDI Machine Readable Barcode String
+    fhir:Device.udi.issuer [ uri ]; # 0..1 UDI Issuing Organization
+    fhir:Device.udi.entryType [ code ]; # 0..1 barcode | rfid | manual +
+  ];
+  fhir:Device.status [ code ]; # 0..1 active | inactive | entered-in-error | unknown
+  fhir:Device.type [ CodeableConcept ]; # 0..1 What kind of device this is
+  fhir:Device.lotNumber [ string ]; # 0..1 Lot number of manufacture
+  fhir:Device.manufacturer [ string ]; # 0..1 Name of device manufacturer
+  fhir:Device.manufactureDate [ dateTime ]; # 0..1 Date when the device was made
+  fhir:Device.expirationDate [ dateTime ]; # 0..1 Date and time of expiry of this device (if applicable)
+  fhir:Device.model [ string ]; # 0..1 Model id assigned by the manufacturer
+  fhir:Device.version [ string ]; # 0..1 Version number (i.e. software)
+  fhir:Device.patient [ Reference(Patient) ]; # 0..1 Patient to whom Device is affixed
+  fhir:Device.owner [ Reference(Organization) ]; # 0..1 Organization responsible for device
+  fhir:Device.contact [ ContactPoint ], ... ; # 0..* Details for human/organization for support
+  fhir:Device.location [ Reference(Location) ]; # 0..1 Where the resource is found
+  fhir:Device.url [ uri ]; # 0..1 Network address to contact device
+  fhir:Device.note [ Annotation ], ... ; # 0..* Device notes and comments
+  fhir:Device.safety [ CodeableConcept ], ... ; # 0..* Safety Characteristics of Device
+]

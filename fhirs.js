@@ -6,6 +6,7 @@ const restify = require('express-restify-mongoose')
 const app = express()
 const router = express.Router()
 const cors = require('cors');
+const jsonld = require('jsonld');
 
 app.use(bodyParser.json())
 app.use(methodOverride())
@@ -189,10 +190,54 @@ function addConcept(path){
   var fs = require('fs'),
     readline = require('readline');
 
-  options={version:"/v" , postRead: (req, res, next) => {
-      console.log("ldldl")
+  options={version:"/v" , postCreate: (req, res, next) => {
+      //console.log("ldldl");
+      //console.log(req.erm.result);
+//let context = {"fhir":"http://hl7.org/fhir/",
+//"identifier": "fhir:Specimen.identifier",
+//"status": "fhir:Specimen.status",
+  //"subject":"fhir:Specimen.subject",
+  //"request": "fhir:Specimen.request",
+  //"processing": "fhir:Specimen.processing",
+  //"processing.additive": "fhir:Specimen.processing.additive"};
+
+      let context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
+      
+
+      console.log(req.erm.result);
+      let compacted = JSON.parse(JSON.stringify(req.erm.result));
+      compacted["@context"]= context;
+      compacted["@type"]= "fhir:Specimen";
+      console.log(Array(req.erm.result))
+      compacted["@id"]= "fhir:Specimen"+Array(req.erm.result)[0]["_id"];
+
+
+      console.log(compacted);
+
+      jsonld.expand(compacted, function(err, expanded) {
+        /* Output:
+        {
+          "http://schema.org/name": [{"@value": "Manu Sporny"}],
+          "http://schema.org/url": [{"@id": "http://manu.sporny.org/"}],
+          "http://schema.org/image": [{"@id": "http://manu.sporny.org/images/manu.png"}]
+        }
+        */
+        console.log(JSON.stringify(expanded));
+
+
+        
+
+      });
+
       next()
+    },
+    postProcess: (req, res) => {
+      const result = req.erm.result         // filtered object
+      const statusCode = req.erm.statusCode // 200 or 201
+
+      //console.info(`${req.method} ${req.path} request completed with status code ${statusCode}`)
     }
+
   }
 
   var fs = require('fs'),
@@ -438,7 +483,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         break;
       case /code/.test(result[2]):
         //console.log("• Matched code DataType");
-        let codes = (result[4].match(/\d (.*)/)[1]).split(" | ");
+        console.log(result[4]);
+        let matchResult = result[4].match(/\d (.*)/);
+        let codes = [];
+        if (matchResult != null){
+          codes = matchResult[1].split(" | ");
+        }
         if ( codes.length > 1 ){
           if ( result[3] == ", ..."){
             valParameter = {type: [String],
@@ -507,7 +557,33 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         schemaJson["properties"] = {};
         schemaJson["properties"][result[1]] = schemaParameter;
         break;
+      case /positiveInt/.test(result[2]):
+        //console.log("• Matched code string");
+        if ( result[3] == ", ..."){
+          valParameter = {type: Number};
+          schemaParameter = {type: "array",
+                             itmes: {type: "number"
+                           }};
+        }else{
+          valParameter = {type: Number};
+          schemaParameter = {type: "number"};
+        }
+        
+        jsonObj[result[1]] = valParameter;
+        schemaJson["properties"] = {};
+        schemaJson["properties"][result[1]] = schemaParameter;
+        break;
       case /dateTime/.test(result[2]):
+        //console.log("• Matched code string");
+        valParameter = {type: Date};
+        schemaParameter = {type: "string", format: "date-time"}
+
+        jsonObj[result[1]] = valParameter;
+        schemaJson["properties"] = {};
+        schemaJson["properties"][result[1]] = schemaParameter;
+
+        break;
+      case /date/.test(result[2]):
         //console.log("• Matched code string");
         valParameter = {type: Date};
         schemaParameter = {type: "string", format: "date"}
@@ -612,7 +688,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           jsonObj["dynamicModelType"] = dmType;
 
           //Create the Schema client
-          schemaDynamicParameter = {type: "string", enum: listRefs};
+          schemaDynamicParameter = {type: "string", "title": "Class "+ result[1],enum: listRefs};
           schemaJson["properties"] = {};
           schemaJson["properties"]["dynamicModelType"] = schemaDynamicParameter;
 
@@ -650,8 +726,6 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           //Create the UI Schema 
           let optionsAutocomplete;
 
-          //let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
-          //let paramMaps = result[1] + "_id";
           autocomplete = { "ui:field": "asyncTypeahead",
                                 "asyncTypeahead": {                                  
                                   isLoading: false,
@@ -665,8 +739,6 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           schemaJson["ui"] = {};
           schemaJson["ui"][result[1]] = autocomplete;
 
-          
-
           //Create rules 
           let rules = [];
           listRefs.forEach( function(element){
@@ -675,7 +747,6 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             parameterCond["dynamicModelType"] = { "is": element };
             let ruleConcept = {};          
             ruleConcept["conditions"] = parameterCond;
-
 
             let conceptURL = element[0].toLowerCase() + element.substring(1)
             let ruteURL = "http://192.168.56.1:4000/api/v/"+conceptURL+"?select=id";            

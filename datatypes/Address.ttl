@@ -1,0 +1,15 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:Address.use [ code ]; # 0..1 home | work | temp | old - purpose of this address
+  fhir:Address.type [ code ]; # 0..1 postal | physical | both
+  fhir:Address.text [ string ]; # 0..1 Text representation of the address
+  fhir:Address.line [ string ], ... ; # 0..* Street name, number, direction & P.O. Box etc.
+  fhir:Address.city [ string ]; # 0..1 Name of city, town etc.
+  fhir:Address.district [ string ]; # 0..1 District name (aka county)
+  fhir:Address.state [ string ]; # 0..1 Sub-unit of country (abbreviations ok)
+  fhir:Address.postalCode [ string ]; # 0..1 Postal code for area
+  fhir:Address.country [ string ]; # 0..1 Country (e.g. can be ISO 3166 2 or 3 letter code)
+  fhir:Address.period [ Period ]; # 0..1 Time period when address was/is in use
+]

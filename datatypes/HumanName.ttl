@@ -1,0 +1,12 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:HumanName.use [ code ]; # 0..1 usual | official | temp | nickname | anonymous | old | maiden
+  fhir:HumanName.text [ string ]; # 0..1 Text representation of the full name
+  fhir:HumanName.family [ string ]; # 0..1 Family name (often called 'Surname')
+  fhir:HumanName.given [ string ], ... ; # 0..* Given names (not always 'first'). Includes middle names
+  fhir:HumanName.prefix [ string ], ... ; # 0..* Parts that come before the name
+  fhir:HumanName.suffix [ string ], ... ; # 0..* Parts that come after the name
+  fhir:HumanName.period [ Period ]; # 0..1 Time period when name was/is in use
+]
