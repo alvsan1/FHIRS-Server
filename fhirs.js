@@ -190,8 +190,8 @@ function addDataTypes(path){
 
 function addConcept(path){
 
-  var fs = require('fs'),
-    readline = require('readline');
+  //var fs = require('fs'),
+    //readline = require('readline');
 
   options={version:"/v" , postCreate: (req, res, next) => {
       //console.log("ldldl");
@@ -204,15 +204,59 @@ function addConcept(path){
   //"processing": "fhir:Specimen.processing",
   //"processing.additive": "fhir:Specimen.processing.additive"};
 
+  //////////////////////////////////////////////////////////////////////////
+  //**************************************************************************
+      ///////////////////////Asincronico///////////////////////////////
+//*******************************************************************************
+//////////////////////////////////////////////////////////////////////////////
+      //console.log(req['originalUrl']);
+      let compacted = JSON.parse(JSON.stringify(req.erm.result));
+
+      let regexp = new RegExp(".*\/(.*)$");
+      let result = req['originalUrl'].match(regexp);
+      //console.log(result);
+      let conceptName = result[1];
+
+
+
+      function jsonldparse(compacted, param){
+        console.log("****************************************")
+        console.log(param);
+        console.log(JSON.parse(JSON.stringify(req.erm.result))[param]);
+
+
+        var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
+        if (type == "number") {
+            // do stuff
+        }
+        else if (type == "string") {
+            // do stuff
+        }
+        else if (type == "object") { // either array or object
+          console.log("*****************************Object***************************");
+          //if (elem instanceof Buffer) {
+          //}
+        }
+        return param;
+      }
+
+
+
+
+      Object.keys(JSON.parse(JSON.stringify(req.erm.result))).forEach( function(param , index) {
+          jsonldparse(compacted,param);
+      });
+
+
       let context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
       
 
       //console.log(req.erm.result);
-      let compacted = JSON.parse(JSON.stringify(req.erm.result));
-      compacted["@context"]= context;
-      compacted["@type"]= "fhir:Specimen";
+      compacted["@type"]= "fhir:"+conceptName;
       //console.log(Array(req.erm.result))
-      compacted["@id"]= "fhir:Specimen#"+Array(req.erm.result)[0]["_id"];
+      compacted["@id"]= "fhir:"+conceptName+"#"+Array(req.erm.result)[0]["_id"];
+      compacted["@context"]= context;
+      
 
 
       console.log(compacted);
@@ -227,18 +271,18 @@ function addConcept(path){
         */
         console.log(JSON.stringify(expanded));
 
-        fetch("http://192.168.56.2:8080/rdf4j-server/repositories/fhir/statements", {
-          method: 'post',
-          headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': "application/ld+json;charset=UTF-8"
-        },
-          body: JSON.stringify(expanded)})
-        .then(response => response)
-        .then(jsondata => {
-          console.log(jsondata);
-          //this.setState({ text: jsondata.text });
-                 });
+        //fetch("http://192.168.56.2:8080/rdf4j-server/repositories/fhir/statements", {
+          //method: 'post',
+          //headers: {
+          //'Accept': 'application/json, text/plain, */*',
+          //'Content-Type': "application/ld+json;charset=UTF-8"
+        //},
+          //body: JSON.stringify(expanded)})
+        //.then(response => response)
+        //.then(jsondata => {
+          //console.log(jsondata);
+          ////this.setState({ text: jsondata.text });
+                 //});
 
 
 
@@ -396,10 +440,11 @@ function addDataType(path){
   var fs = require('fs'),
     readline = require('readline');
 
+  console.log(path)
   let regexp = new RegExp("^.*\/(.*)\.ttl");
   let result = path.match(regexp);
   var dataTypeName = result[1];
-  //console.log(path)
+  //
   //console.log(dataTypeName);
 
   
