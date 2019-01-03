@@ -217,12 +217,15 @@ function addConcept(path){
       //console.log(result);
       let conceptName = result[1];
 
+      
 
-
-      function jsonldparse(compacted, param){
+      function jsonldparse(conceptName, compacted, context, param){
         console.log("****************************************")
         console.log(param);
         console.log(JSON.parse(JSON.stringify(req.erm.result))[param]);
+
+        let conceptSchema = require('mongoose').model(conceptName).schema;
+        console.log(conceptSchema.paths[param].path);
 
 
         var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
@@ -230,6 +233,14 @@ function addConcept(path){
             // do stuff
         }
         else if (type == "string") {
+            console.log("------------String---------------------String---------------------");
+            console.log(param);
+            if (param === "_id"){
+              console.log("------------Id---------------------Id---------------------");
+              compacted["@id"] = "fhir:"+conceptName+"#"+Array(req.erm.result)[0]["_id"];
+            }else{
+              context[param] = "fhir:"+conceptName+"."+param;
+            }
             // do stuff
         }
         else if (type == "object") { // either array or object
@@ -241,20 +252,20 @@ function addConcept(path){
       }
 
 
-
+      let context = {};
 
       Object.keys(JSON.parse(JSON.stringify(req.erm.result))).forEach( function(param , index) {
-          jsonldparse(compacted,param);
+          jsonldparse(conceptName, compacted, context,param);
       });
 
 
-      let context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
-      
+      //context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
+      context["fhir"] = "http://hl7.org/fhir/";
 
       //console.log(req.erm.result);
       compacted["@type"]= "fhir:"+conceptName;
       //console.log(Array(req.erm.result))
-      compacted["@id"]= "fhir:"+conceptName+"#"+Array(req.erm.result)[0]["_id"];
+      //compacted["@id"]= "fhir:"+conceptName+"#"+Array(req.erm.result)[0]["_id"];
       compacted["@context"]= context;
       
 

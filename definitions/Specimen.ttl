@@ -6,7 +6,7 @@
 
   # from Resource: .id, .meta, .implicitRules, and .language
   # from DomainResource: .text, .contained, .extension, and .modifierExtension
-  fhir:Specimen.identifier [ Identifier ], ... ; # 0..* External Identifier
+  #fhir:Specimen.identifier [ Identifier ], ... ; # 0..* External Identifier
   #fhir:Specimen.accessionIdentifier [ Identifier ]; # 0..1 Identifier assigned by the lab
   fhir:Specimen.status [ code ]; # 0..1 available | unavailable | unsatisfactory | entered-in-error
   #fhir:Specimen.type [ CodeableConcept ]; # 0..1 Kind of material that forms the specimen

@@ -16,9 +16,9 @@
     #fhir:Substance.instance.quantity [ Quantity(SimpleQuantity) ]; # 0..1 Amount of substance in the package
   #], ...;
   #fhir:Substance.ingredient [ # 0..* Composition information about the substance
-    fhir:Substance.ingredient.quantity [ Ratio ]; # 0..1 Optional amount (concentration)
+    #fhir:Substance.ingredient.quantity [ Ratio ]; # 0..1 Optional amount (concentration)
     ## Substance.ingredient.substance[x] : 1..1 A component of the substance. One of these 2
-      fhir:Substance.ingredient.substanceCodeableConcept [ CodeableConcept ]
-      fhir:Substance.ingredient.substanceReference [ Reference(Substance) ]
+      #fhir:Substance.ingredient.substanceCodeableConcept [ CodeableConcept ]
+      #fhir:Substance.ingredient.substanceReference [ Reference(Substance) ]
   #], ...;
 ]
