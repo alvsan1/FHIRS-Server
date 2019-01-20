@@ -195,7 +195,7 @@ function addConcept(path){
 
   options={version:"/v" , postCreate: (req, res, next) => {
       //console.log("ldldl");
-      //console.log(req.erm.result);
+      console.log(req.erm.result);
 //let context = {"fhir":"http://hl7.org/fhir/",
 //"identifier": "fhir:Specimen.identifier",
 //"status": "fhir:Specimen.status",
@@ -210,25 +210,29 @@ function addConcept(path){
 //*******************************************************************************
 //////////////////////////////////////////////////////////////////////////////
       //console.log(req['originalUrl']);
-      let compacted = JSON.parse(JSON.stringify(req.erm.result));
+      //let compacted = JSON.stringify(req.erm.result);
+      //let compacted = req.erm.result;
+      //console.log(compacted);
 
       let regexp = new RegExp(".*\/(.*)$");
       let result = req['originalUrl'].match(regexp);
       //console.log(result);
       let conceptName = result[1];
 
-      
+      /*
 
-      function jsonldparse(conceptName, compacted, context, param){
+      function jsonldparse(conceptName, compacted, context, param, jsonIn){
         console.log("****************************************")
+        console.log(ConceptName);
         console.log(param);
-        console.log(JSON.parse(JSON.stringify(req.erm.result))[param]);
+        //console.log(JSON.parse(JSON.stringify(req.erm.result))[param]);
 
-        let conceptSchema = require('mongoose').model(conceptName).schema;
-        console.log(conceptSchema.paths[param].path);
+        ------>>> let conceptSchema = require('mongoose').model(conceptName).schema;
+        ------>>> console.log(conceptSchema.paths[param].path);
 
 
-        var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
+        //var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
+        var type = typeof JSON.parse(JSON.stringify(jsonIn))[param];
         if (type == "number") {
             // do stuff
         }
@@ -245,6 +249,11 @@ function addConcept(path){
         }
         else if (type == "object") { // either array or object
           console.log("*****************************Object***************************");
+          let compactedObject = {};
+
+          Object.keys( param ).forEach( function(paramObject , index) {
+            jsonldparse(conceptName, compactedObject, context, paramObject);
+          });
           //if (elem instanceof Buffer) {
           //}
         }
@@ -253,24 +262,91 @@ function addConcept(path){
 
 
       let context = {};
-
-      Object.keys(JSON.parse(JSON.stringify(req.erm.result))).forEach( function(param , index) {
-          jsonldparse(conceptName, compacted, context,param);
+      let jsonIn = JSON.parse(JSON.stringify(req.erm.result));
+      Object.keys(jsonIn).forEach( function(param , index) {
+          jsonldparse(conceptName, compacted, context,param, jsonIn);
       });
+      */
 
+
+      function jsonldparse(conceptName, compacted, context, paramIn, jsonIn){
+        console.log("****************************************")
+        console.log(paramIn);
+        console.log(conceptName);
+        
+        //console.log(paramIn);
+        let jsonInObject = JSON.parse(JSON.stringify(jsonIn))[paramIn];
+        //console.log(jsonInObject);
+
+        //let conceptSchema = require('mongoose').model(conceptName).schema;
+//        console.log("--------PATH------------------");
+//        console.log(conceptSchema.paths[paramIn].path);
+
+
+        //var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
+        var type = typeof jsonInObject;
+        if (type == "number") {
+            // do stuff
+        }
+        else if (type == "string") {            
+            //console.log("------------String---------------------String---------------------");
+            //console.log(paramIn);
+            if (paramIn === "_id"){
+              //console.log("------------Id---------------------Id---------------------");
+              compacted["@type"]= "fhir:"+conceptName;
+              compacted["@id"] = "fhir:"+conceptName+"#"+Array(jsonIn)[0]["_id"];
+            }else{
+              context[paramIn] = "fhir:"+conceptName+"."+paramIn;
+              compacted[paramIn] = Array(jsonIn)[0][paramIn]
+            }
+            // do stuff
+        }
+        else if (type == "object") { // either array or object
+          console.log("****************************Object***************************");
+                    
+          compacted[paramIn] = {};          
+          Object.keys( jsonInObject ).forEach( function(param , index) {
+            let compactedObject = {};
+            //Sentencia que debe ser corregida para que se pueda extraer el type desde el esquema.
+            let conceptNameObject = paramIn[0].toUpperCase() + paramIn.substring(1)            
+            //compactedObject["@type"]= "fhir:"+param[0].toUpperCase() + param.substring(1);
+            jsonldparse(conceptNameObject, compactedObject, context, param, jsonInObject);
+            compacted[paramIn] = Object.assign(compacted[paramIn],compactedObject);
+          });
+          //console.log("**********"+paramIn+"*******************Object***************************");
+          //console.log(compactedObject);
+          context[paramIn] = "fhir:"+conceptName+"."+paramIn;
+          
+          //compacted[paramIn]= JSON.parse(JSON.stringify(compactedObject));
+
+
+          //if (elem instanceof Buffer) {
+          //}
+        }
+        return compacted;
+      }
+
+
+      let context = {};
+      let compacted = {};
+      
+      let jsonIn = JSON.parse(JSON.stringify(req.erm.result));
+      Object.keys(jsonIn).forEach( function(param , index) {
+          jsonldparse( conceptName, compacted, context, param, jsonIn);
+      });
 
       //context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
       context["fhir"] = "http://hl7.org/fhir/";
 
       //console.log(req.erm.result);
-      compacted["@type"]= "fhir:"+conceptName;
+      //compacted["@type"]= "fhir:"+conceptName;
       //console.log(Array(req.erm.result))
       //compacted["@id"]= "fhir:"+conceptName+"#"+Array(req.erm.result)[0]["_id"];
       compacted["@context"]= context;
       
 
 
-      console.log(compacted);
+      //console.log(compacted);
 
       jsonld.expand(compacted, function(err, expanded) {
         /* Output:
@@ -280,6 +356,9 @@ function addConcept(path){
           "http://schema.org/image": [{"@id": "http://manu.sporny.org/images/manu.png"}]
         }
         */
+
+
+
         console.log(JSON.stringify(expanded));
 
         //fetch("http://192.168.56.2:8080/rdf4j-server/repositories/fhir/statements", {
@@ -405,10 +484,10 @@ function addConcept(path){
           }else{
             rulesFile = resultJson.rules;
           }
-          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
-          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
-          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
-          console.log(resultJson.rules);
+          //console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
+//          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
+//          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
+//          console.log(resultJson.rules);
           //console.log("****************" +"definitions" +"**********************************");          
         }
 
