@@ -30,6 +30,7 @@ Schema = mongoose.Schema;
 
 function addModels(path){ 
 
+  //
   var pathDataType = path.match((new RegExp("(.*)definitions\/")))[1]+"datatypes/";
   addDataTypes(pathDataType);
 
@@ -43,10 +44,9 @@ function addModels(path){
           //console.log(items[i]);
 
           var ConceptName = items[i].replace(/\.ttl/, '');
-          var modelo = new Schema({
-          })
+          var modelo = new Schema()
 
-          let dataType = mongoose.model(ConceptName, modelo);
+          mongoose.model(ConceptName, modelo);
       }
   });
 
@@ -269,19 +269,17 @@ function addConcept(path){
       */
 
 
-      function jsonldparse(conceptName, compacted, context, paramIn, jsonIn){
+      function jsonldparse(conceptName, schema ,compacted, context, paramIn, jsonIn){
         console.log("****************************************")
         console.log(paramIn);
         console.log(conceptName);
+        console.log("************Schema*********************")
+        //console.log(schema);
+        console.log("****************************************")
         
         //console.log(paramIn);
         let jsonInObject = JSON.parse(JSON.stringify(jsonIn))[paramIn];
-        //console.log(jsonInObject);
-
-        //let conceptSchema = require('mongoose').model(conceptName).schema;
-//        console.log("--------PATH------------------");
-//        console.log(conceptSchema.paths[paramIn].path);
-
+        console.log(jsonInObject);
 
         //var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
         var type = typeof jsonInObject;
@@ -289,15 +287,21 @@ function addConcept(path){
             // do stuff
         }
         else if (type == "string") {            
-            //console.log("------------String---------------------String---------------------");
+            console.log("------------String---------------------String---------------------");
+            if (schema.className == undefined ){
+                schema.className = conceptName;
+            }
+
             //console.log(paramIn);
             if (paramIn === "_id"){
               //console.log("------------Id---------------------Id---------------------");
-              compacted["@type"]= "fhir:"+conceptName;
-              compacted["@id"] = "fhir:"+conceptName+"#"+Array(jsonIn)[0]["_id"];
+              //console.log(conceptName);              
+              
+              //compacted["@type"]= "fhir:"+conceptName;
+              compacted["@id"] = "fhir:"+schema.className+"#"+Array(jsonIn)[0]["_id"];
             }else{
-              context[paramIn] = "fhir:"+conceptName+"."+paramIn;
-              compacted[paramIn] = Array(jsonIn)[0][paramIn]
+              context[paramIn] = "fhir:"+schema.className+"."+paramIn;
+              compacted[paramIn] = Array(jsonIn)[0][paramIn];
             }
             // do stuff
         }
@@ -305,23 +309,50 @@ function addConcept(path){
           console.log("****************************Object***************************");
                     
           compacted[paramIn] = {};          
+          //let conceptSchema = require('mongoose').model(conceptName).schema;
+
+
+
+          //let conceptSchema = require('mongoose').model(conceptName).schema;
+          //console.log(paramIn);
+          //console.log(jsonInObject);
+          
+
+          //console.log(conceptSchema.paths[paramIn].schema.className);
+
+
+          //let classNameObject;
+          //if ( conceptSchema.paths[paramIn].schema != undefined ){
+          //    classNameObject = conceptSchema.paths[paramIn].schema.className;  
+          //}
+
+
+
           Object.keys( jsonInObject ).forEach( function(param , index) {
+
             let compactedObject = {};
             //Sentencia que debe ser corregida para que se pueda extraer el type desde el esquema.
-            let conceptNameObject = paramIn[0].toUpperCase() + paramIn.substring(1)            
+
+            //let conceptNameObject = paramIn[0].toUpperCase() + paramIn.substring(1);
+
+  //        console.log("--------PATH------------------");
+            
             //compactedObject["@type"]= "fhir:"+param[0].toUpperCase() + param.substring(1);
-            jsonldparse(conceptNameObject, compactedObject, context, param, jsonInObject);
+
+            jsonldparse(conceptName, schema.paths[paramIn].schema, compactedObject, context, param, jsonInObject);
             compacted[paramIn] = Object.assign(compacted[paramIn],compactedObject);
           });
           //console.log("**********"+paramIn+"*******************Object***************************");
           //console.log(compactedObject);
-          context[paramIn] = "fhir:"+conceptName+"."+paramIn;
+          context[paramIn] = "fhir:"+schema.className+"."+paramIn;
           
           //compacted[paramIn]= JSON.parse(JSON.stringify(compactedObject));
 
 
           //if (elem instanceof Buffer) {
           //}
+        }else{
+          console.log("////////////Else/////////////////");
         }
         return compacted;
       }
@@ -331,8 +362,9 @@ function addConcept(path){
       let compacted = {};
       
       let jsonIn = JSON.parse(JSON.stringify(req.erm.result));
+      let conceptSchema = require('mongoose').model(conceptName).schema;
       Object.keys(jsonIn).forEach( function(param , index) {
-          jsonldparse( conceptName, compacted, context, param, jsonIn);
+          jsonldparse( conceptName, conceptSchema, compacted, context, param, jsonIn);
       });
 
       //context = {"fhir":"http://hl7.org/fhir/", "status": "fhir:Specimen.status"};
@@ -346,7 +378,7 @@ function addConcept(path){
       
 
 
-      //console.log(compacted);
+      console.log(compacted);
 
       jsonld.expand(compacted, function(err, expanded) {
         /* Output:
@@ -922,6 +954,9 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         } else {
           //console.log("• Is DataType Valid.");
           //console.log(result[2]);
+
+          console.log("////////** ira aca ??? ***  "+result[2] +"//////////");
+          valParameter["className"] = result[2];
           jsonObj[result[1]] = valParameter; 
 
           schemaParameter = {$ref: "#/definitions/"+result[2], title: result[2]};
@@ -954,7 +989,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
   }
 }
 
+
+//Initial Script, 
+/////////////////
+//////////It must be parameterized
 var pathDefinitions = "./definitions/"; //Parametro configurable
+/////////////////
 addModels(pathDefinitions);
 
 
