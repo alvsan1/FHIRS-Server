@@ -13,7 +13,7 @@
   #fhir:Specimen.subject [ Reference(Patient|Group|Device|Substance) ]; # 1..1 Where the specimen came from. This may be from the patient(s) or from the environment or a device
   #fhir:Specimen.receivedTime [ dateTime ]; # 0..1 The time when specimen was received for processing
   #fhir:Specimen.parent [ Reference(Specimen) ], ... ; # 0..* Specimen from which this specimen originated
-  #fhir:Specimen.request [ Reference(ProcedureRequest) ], ... ; # 0..* Why the specimen was collected
+  fhir:Specimen.request [ Reference(ProcedureRequest) ], ... ; # 0..* Why the specimen was collected
   #fhir:Specimen.collection [ # 0..1 Collection details
     #fhir:Specimen.collection.collector [ Reference(Practitioner) ]; # 0..1 Who collected the specimen
     ## Specimen.collection.collected[x] : 0..1 Collection time. One of these 2
