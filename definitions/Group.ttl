@@ -1,0 +1,33 @@
+@prefix fhir: <http://hl7.org/fhir/> .doco
+
+
+[ a fhir:Group;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Group.identifier [ Identifier ], ... ; # 0..* Unique id
+  fhir:Group.active [ boolean ]; # 0..1 Whether this group's record is in active use
+  fhir:Group.type [ code ]; # 1..1 person | animal | practitioner | device | medication | substance
+  fhir:Group.actual [ boolean ]; # 1..1 Descriptive or actual
+  fhir:Group.code [ CodeableConcept ]; # 0..1 Kind of Group members
+  fhir:Group.name [ string ]; # 0..1 Label for Group
+  fhir:Group.quantity [ unsignedInt ]; # 0..1 Number of members
+  #fhir:Group.managingEntity [ Reference(Organization|RelatedPerson|Practitioner|PractitionerRole) ]; # 0..1 Entity that is the custodian of the Group's definition
+  fhir:Group.characteristic [ # 0..* Include / Exclude group members by Trait
+    fhir:Group.characteristic.code [ CodeableConcept ]; # 1..1 Kind of characteristic
+    # Group.characteristic.value[x] : 1..1 Value held by characteristic. One of these 5
+      fhir:Group.characteristic.valueCodeableConcept [ CodeableConcept ]
+      fhir:Group.characteristic.valueBoolean [ boolean ]
+      fhir:Group.characteristic.valueQuantity [ Quantity ]
+      fhir:Group.characteristic.valueRange [ Range ]
+      fhir:Group.characteristic.valueReference [ Reference ]
+    fhir:Group.characteristic.exclude [ boolean ]; # 1..1 Group includes or excludes
+    fhir:Group.characteristic.period [ Period ]; # 0..1 Period over which characteristic is tested
+  ], ...;
+  #fhir:Group.member [ # 0..* Who or what is in group
+    #fhir:Group.member.entity [ Reference(Patient|Practitioner|PractitionerRole|Device|Medication|Substance|Group) ]; # 1..1 Reference to the group member
+    fhir:Group.member.period [ Period ]; # 0..1 Period member belonged to the group
+    fhir:Group.member.inactive [ boolean ]; # 0..1 If member is no longer in group
+  #], ...;
+]

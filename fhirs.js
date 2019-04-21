@@ -442,7 +442,7 @@ function addConcept(path){
 
         console.log(JSON.stringify(expanded));
 
-        fetch("http://192.168.0.104:8080/rdf4j-server/repositories/fhir/statements", {
+        fetch("http://192.168.0.108:8080/rdf4j-server/repositories/fhir/statements", {
           method: 'post',
           headers: {
           'Accept': 'application/json, text/plain, */*',
@@ -843,9 +843,20 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         break;        
       case /uri/.test(result[2]):
         //console.log("• Matched uri DataType");
-        valParameter = {type: String, 
-                        validate: require('mongoose-validators').isURL()};
+        if ( result[3] == ", ..."){
+          valParameter = {type: [String]}
+          schemaParameter = {type: "array",
+                             items: {type: "string"
+                           }};
+        }else{
+          valParameter = {type: String,
+                          validate: require('mongoose-validators').isURL()};
+          schemaParameter = {type: "string"};
+        }
         jsonObj[result[1]] = valParameter;
+        schemaJson["properties"] = {};
+        schemaJson["properties"][result[1]] = schemaParameter;
+
         break;
       case /base64Binary/.test(result[2]):
         //console.log("• Matched uri DataType");
