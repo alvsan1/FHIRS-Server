@@ -1,0 +1,60 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[ a fhir:Encounter;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Encounter.identifier [ Identifier ], ... ; # 0..* Identifier(s) by which this encounter is known
+  fhir:Encounter.status [ code ]; # 1..1 planned | arrived | triaged | in-progress | onleave | finished | cancelled +
+  #fhir:Encounter.statusHistory [ # 0..* List of past encounter statuses
+#    fhir:Encounter.statusHistory.status [ code ]; # 1..1 planned | arrived | triaged | in-progress | onleave | finished | cancelled +
+#    fhir:Encounter.statusHistory.period [ Period ]; # 1..1 The time that the episode was in the specified status
+#  ], ...;
+  fhir:Encounter.class [ Coding ]; # 1..1 Classification of patient encounter
+#  fhir:Encounter.classHistory [ # 0..* List of past encounter classes
+#    fhir:Encounter.classHistory.class [ Coding ]; # 1..1 inpatient | outpatient | ambulatory | emergency +
+#    fhir:Encounter.classHistory.period [ Period ]; # 1..1 The time that the episode was in the specified class
+#  ], ...;
+#  fhir:Encounter.type [ CodeableConcept ], ... ; # 0..* Specific type of encounter
+#  fhir:Encounter.serviceType [ CodeableConcept ]; # 0..1 Specific type of service
+#  fhir:Encounter.priority [ CodeableConcept ]; # 0..1 Indicates the urgency of the encounter
+  fhir:Encounter.subject [ Reference(Patient|Group) ]; # 0..1 The patient or group present at the encounter
+#  fhir:Encounter.episodeOfCare [ Reference(EpisodeOfCare) ], ... ; # 0..* Episode(s) of care that this encounter should be recorded against
+#  fhir:Encounter.basedOn [ Reference(ServiceRequest) ], ... ; # 0..* The ServiceRequest that initiated this encounter
+#  fhir:Encounter.participant [ # 0..* List of participants involved in the encounter
+#    fhir:Encounter.participant.type [ CodeableConcept ], ... ; # 0..* Role of participant in encounter
+#    fhir:Encounter.participant.period [ Period ]; # 0..1 Period of time during the encounter that the participant participated
+#    fhir:Encounter.participant.individual [ Reference(Practitioner|PractitionerRole|RelatedPerson) ]; # 0..1 Persons involved in the encounter other than the patient
+#  ], ...;
+#  fhir:Encounter.appointment [ Reference(Appointment) ], ... ; # 0..* The appointment that scheduled this encounter
+#  fhir:Encounter.period [ Period ]; # 0..1 The start and end time of the encounter
+#  #fhir:Encounter.length [ Duration ]; # 0..1 Quantity of time the encounter lasted (less time absent)
+  fhir:Encounter.reasonCode [ CodeableConcept ], ... ; # 0..* Coded reason the encounter takes place
+  fhir:Encounter.reasonReference [ Reference(Condition|Procedure|Observation|ImmunizationRecommendation) ], ... ; # 0..* Reason the encounter takes place (reference)
+  fhir:Encounter.diagnosis [ # 0..* The list of diagnosis relevant to this encounter
+  #  fhir:Encounter.diagnosis.condition [ Reference(Condition|Procedure) ]; # 1..1 The diagnosis or procedure relevant to the encounter
+    fhir:Encounter.diagnosis.use [ CodeableConcept ]; # 0..1 Role that this diagnosis has within the encounter (e.g. admission, billing, discharge â€¦)
+    fhir:Encounter.diagnosis.rank [ positiveInt ]; # 0..1 Ranking of the diagnosis (for each role type)
+  ], ...;
+#  fhir:Encounter.account [ Reference(Account) ], ... ; # 0..* The set of accounts that may be used for billing for this Encounter
+  fhir:Encounter.hospitalization [ # 0..1 Details about the admission to a healthcare service
+#    fhir:Encounter.hospitalization.preAdmissionIdentifier [ Identifier ]; # 0..1 Pre-admission identifier
+##    fhir:Encounter.hospitalization.origin [ Reference(Location|Organization) ]; # 0..1 The location/organization from which the patient came before admission
+#    fhir:Encounter.hospitalization.admitSource [ CodeableConcept ]; # 0..1 From where patient was admitted (physician referral, transfer)
+#    fhir:Encounter.hospitalization.reAdmission [ CodeableConcept ]; # 0..1 The type of hospital re-admission that has occurred (if any). If the value is absent, then this is not identified as a readmission
+#    fhir:Encounter.hospitalization.dietPreference [ CodeableConcept ], ... ; # 0..* Diet preferences reported by the patient
+#    fhir:Encounter.hospitalization.specialCourtesy [ CodeableConcept ], ... ; # 0..* Special courtesies (VIP, board member)
+#    fhir:Encounter.hospitalization.specialArrangement [ CodeableConcept ], ... ; # 0..* Wheelchair, translator, stretcher, etc.
+##    fhir:Encounter.hospitalization.destination [ Reference(Location|Organization) ]; # 0..1 Location/organization to which the patient is discharged
+    fhir:Encounter.hospitalization.dischargeDisposition [ CodeableConcept ]; # 0..1 Category or kind of location after discharge
+  ];
+#  fhir:Encounter.location [ # 0..* List of locations where the patient has been
+#  #  fhir:Encounter.location.location [ Reference(Location) ]; # 1..1 Location the encounter takes place
+#    fhir:Encounter.location.status [ code ]; # 0..1 planned | active | reserved | completed
+#    fhir:Encounter.location.physicalType [ CodeableConcept ]; # 0..1 The physical type of the location (usually the level in the location hierachy - bed room ward etc.)
+#    fhir:Encounter.location.period [ Period ]; # 0..1 Time period during which the patient was present at the location
+#  ], ...;
+#  fhir:Encounter.serviceProvider [ Reference(Organization) ]; # 0..1 The organization (facility) responsible for this encounter
+#  fhir:Encounter.partOf [ Reference(Encounter) ]; # 0..1 Another Encounter this encounter is part of
+]

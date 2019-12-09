@@ -1,4 +1,4 @@
-@prefix fhir: <http://hl7.org/fhir/> .doco
+@prefix fhir: <http://hl7.org/fhir/>
 
 
 [ a fhir:Group;
@@ -20,8 +20,8 @@
       fhir:Group.characteristic.valueCodeableConcept [ CodeableConcept ]
       fhir:Group.characteristic.valueBoolean [ boolean ]
       fhir:Group.characteristic.valueQuantity [ Quantity ]
-      fhir:Group.characteristic.valueRange [ Range ]
-      fhir:Group.characteristic.valueReference [ Reference ]
+#      fhir:Group.characteristic.valueRange [ Range ]
+#      fhir:Group.characteristic.valueReference [ Reference ]
     fhir:Group.characteristic.exclude [ boolean ]; # 1..1 Group includes or excludes
     fhir:Group.characteristic.period [ Period ]; # 0..1 Period over which characteristic is tested
   ], ...;

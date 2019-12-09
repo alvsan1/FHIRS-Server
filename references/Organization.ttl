@@ -1,0 +1,16 @@
+@prefix fhir:  <http://hl7.org/fhir/> . 
+@prefix owl:   <http://www.w3.org/2002/07/owl#> . 
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix dt:    <http://hl7.org/orim/datatype/> . 
+@prefix cs:    <http://hl7.org/orim/codesystem/> . 
+@prefix fhir-vs: <http://hl7.org/fhir/ValueSet/> . 
+@prefix ex:    <http://hl7.org/fhir/StructureDefinition/> . 
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . 
+@prefix rim:   <http://hl7.org/owl/rim/> . 
+@prefix dcterms: <http://purl.org/dc/terms/> . 
+@prefix vs:    <http://hl7.org/orim/valueset/> . 
+@prefix loinc: <http://loinc.org/rdf#> . 
+@prefix w5:    <http://hl7.org/fhir/w5#> . 
+@prefix dc:    <http://purl.org/dc/elements/1.1/> . 
+

@@ -1,0 +1,27 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[
+ # from BackboneElement: Element.extension, BackboneElement.modifierextension
+  fhir:Timing.event [ dateTime ], ... ; # 0..* When the event occurs
+  fhir:Timing.repeat [ # 0..1 When the event is to occur
+    # Timing.repeat.bounds[x] : 0..1 Length/Range of lengths, or (Start and/or end) limits. One of these 3
+      #fhir:Timing.repeat.boundsDuration [ Duration ]
+      #fhir:Timing.repeat.boundsRange [ Range ]
+      #fhir:Timing.repeat.boundsPeriod [ Period ]
+    fhir:Timing.repeat.count [ positiveInt ]; # 0..1 Number of times to repeat
+    fhir:Timing.repeat.countMax [ positiveInt ]; # 0..1 Maximum number of times to repeat
+    fhir:Timing.repeat.duration [ decimal ]; # 0..1 How long when it happens
+    fhir:Timing.repeat.durationMax [ decimal ]; # 0..1 How long when it happens (Max)
+    fhir:Timing.repeat.durationUnit [ code ]; # 0..1 s | min | h | d | wk | mo | a - unit of time (UCUM)
+    fhir:Timing.repeat.frequency [ positiveInt ]; # 0..1 Event occurs frequency times per period
+    fhir:Timing.repeat.frequencyMax [ positiveInt ]; # 0..1 Event occurs up to frequencyMax times per period
+    fhir:Timing.repeat.period [ decimal ]; # 0..1 Event occurs frequency times per period
+    fhir:Timing.repeat.periodMax [ decimal ]; # 0..1 Upper limit of period (3-4 hours)
+    fhir:Timing.repeat.periodUnit [ code ]; # 0..1 s | min | h | d | wk | mo | a - unit of time (UCUM)
+    fhir:Timing.repeat.dayOfWeek [ code ], ... ; # 0..* mon | tue | wed | thu | fri | sat | sun
+    #fhir:Timing.repeat.timeOfDay [ time ], ... ; # 0..* Time of day for action
+    fhir:Timing.repeat.when [ code ], ... ; # 0..* Code for time period of occurrence
+    fhir:Timing.repeat.offset [ unsignedInt ]; # 0..1 Minutes from event (before or after)
+  ];
+  fhir:Timing.code [ CodeableConcept ]; # 0..1 BID | TID | QID | AM | PM | QD | QOD | +
+]

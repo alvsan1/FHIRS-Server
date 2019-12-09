@@ -1,0 +1,63 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:CarePlan;
+  #fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:CarePlan.identifier [ Identifier ], ... ; # 0..* External Ids for this plan
+  #fhir:CarePlan.instantiatesCanonical [ canonical(PlanDefinition|Questionnaire|Measure|ActivityDefinition|OperationDefinition) ], ... ; # 0..* Instantiates FHIR protocol or definition
+  fhir:CarePlan.instantiatesUri [ uri ], ... ; # 0..* Instantiates external protocol or definition
+  fhir:CarePlan.basedOn [ Reference(CarePlan) ], ... ; # 0..* Fulfills CarePlan
+  fhir:CarePlan.replaces [ Reference(CarePlan) ], ... ; # 0..* CarePlan replaced by this CarePlan
+  fhir:CarePlan.partOf [ Reference(CarePlan) ], ... ; # 0..* Part of referenced CarePlan
+  fhir:CarePlan.status [ code ]; # 1..1 draft | active | suspended | completed | entered-in-error | cancelled | unknown
+  fhir:CarePlan.intent [ code ]; # 1..1 proposal | plan | order | option
+  fhir:CarePlan.category [ CodeableConcept ], ... ; # 0..* Type of plan
+  fhir:CarePlan.title [ string ]; # 0..1 Human-friendly name for the care plan
+  fhir:CarePlan.description [ string ]; # 0..1 Summary of nature of plan
+  fhir:CarePlan.subject [ Reference(Patient|Group) ]; # 1..1 Who the care plan is for
+  fhir:CarePlan.encounter [ Reference(Encounter) ]; # 0..1 Encounter created as part of
+  fhir:CarePlan.period [ Period ]; # 0..1 Time period plan covers
+  fhir:CarePlan.created [ dateTime ]; # 0..1 Date record was first recorded
+  fhir:CarePlan.author [ Reference(Patient|Practitioner|PractitionerRole|Device|RelatedPerson|Organization|CareTeam) ]; # 0..1 Who is the designated responsible party
+  fhir:CarePlan.contributor [ Reference(Patient|Practitioner|PractitionerRole|Device|RelatedPerson|Organization|CareTeam) ], ... ; # 0..* Who provided the content of the care plan
+  fhir:CarePlan.careTeam [ Reference(CareTeam) ], ... ; # 0..* Who's involved in plan?
+  fhir:CarePlan.addresses [ Reference(Condition) ], ... ; # 0..* Health issues this plan addresses
+  fhir:CarePlan.supportingInfo [ Reference(Any) ], ... ; # 0..* Information considered as part of plan
+  fhir:CarePlan.goal [ Reference(Goal) ], ... ; # 0..* Desired outcome of plan
+  #fhir:CarePlan.activity [ # 0..* Action to occur as part of plan
+  #  fhir:CarePlan.activity.outcomeCodeableConcept [ CodeableConcept ], ... ; # 0..* Results of the activity
+#    fhir:CarePlan.activity.outcomeReference [ Reference(Any) ], ... ; # 0..* Appointment, Encounter, Procedure, etc.
+#    fhir:CarePlan.activity.progress [ Annotation ], ... ; # 0..* Comments about the activity status/progress
+#    fhir:CarePlan.activity.reference [ Reference(Appointment|CommunicationRequest|DeviceRequest|MedicationRequest|NutritionOrder|
+#  Task|ServiceRequest|VisionPrescription|RequestGroup) ]; # 0..1 Activity details defined in specific resource
+#   # fhir:CarePlan.activity.detail [ # 0..1 In-line definition of activity
+#      fhir:CarePlan.activity.detail.kind [ code ]; # 0..1 Kind of resource
+#      #fhir:CarePlan.activity.detail.instantiatesCanonical [ canonical(PlanDefinition|ActivityDefinition|Questionnaire|Measure|OperationDefinition) ], ... ; # 0..* Instantiates FHIR protocol or definition
+#      fhir:CarePlan.activity.detail.instantiatesUri [ uri ], ... ; # 0..* Instantiates external protocol or definition
+#      fhir:CarePlan.activity.detail.code [ CodeableConcept ]; # 0..1 Detail type of activity
+#      fhir:CarePlan.activity.detail.reasonCode [ CodeableConcept ], ... ; # 0..* Why activity should be done or why activity was prohibited
+#      fhir:CarePlan.activity.detail.reasonReference [ Reference(Condition|Observation|DiagnosticReport|DocumentReference) ], ... ; # 0..* Why activity is needed
+#      fhir:CarePlan.activity.detail.goal [ Reference(Goal) ], ... ; # 0..* Goals this activity relates to
+#      fhir:CarePlan.activity.detail.status [ code ]; # 1..1 not-started | scheduled | in-progress | on-hold | completed | cancelled | stopped | unknown | entered-in-error
+#      fhir:CarePlan.activity.detail.statusReason [ CodeableConcept ]; # 0..1 Reason for current status
+#      fhir:CarePlan.activity.detail.doNotPerform [ boolean ]; # 0..1 If true, activity is prohibiting action
+#      # CarePlan.activity.detail.scheduled[x] : 0..1 When activity is to occur. One of these 3
+#        fhir:CarePlan.activity.detail.scheduledTiming [ Timing ]
+#        fhir:CarePlan.activity.detail.scheduledPeriod [ Period ]
+#        fhir:CarePlan.activity.detail.scheduledString [ string ]
+#      fhir:CarePlan.activity.detail.location [ Reference(Location) ]; # 0..1 Where it should happen
+#      fhir:CarePlan.activity.detail.performer [ Reference(Practitioner|PractitionerRole|Organization|RelatedPerson|Patient|CareTeam|
+#  HealthcareService|Device) ], ... ; # 0..* Who will be responsible?
+#      # CarePlan.activity.detail.product[x] : 0..1 What is to be administered/supplied. One of these 2
+#        fhir:CarePlan.activity.detail.productCodeableConcept [ CodeableConcept ]
+#        fhir:CarePlan.activity.detail.productReference [ Reference(Medication|Substance) ]
+#      #fhir:CarePlan.activity.detail.dailyAmount [ Quantity(SimpleQuantity) ]; # 0..1 How to consume/day?
+#      #fhir:CarePlan.activity.detail.quantity [ Quantity(SimpleQuantity) ]; # 0..1 How much to administer/supply/consume
+#      fhir:CarePlan.activity.detail.description [ string ]; # 0..1 Extra info describing activity to perform
+    #];
+  #], ...;
+  fhir:CarePlan.note [ Annotation ], ... ; # 0..* Comments about the plan
+]

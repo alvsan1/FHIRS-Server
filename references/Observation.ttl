@@ -1,0 +1,53 @@
+@prefix fhir:  <http://hl7.org/fhir/> . 
+@prefix owl:   <http://www.w3.org/2002/07/owl#> . 
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix dt:    <http://hl7.org/orim/datatype/> . 
+@prefix cs:    <http://hl7.org/orim/codesystem/> . 
+@prefix fhir-vs: <http://hl7.org/fhir/ValueSet/> . 
+@prefix ex:    <http://hl7.org/fhir/StructureDefinition/> . 
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . 
+@prefix rim:   <http://hl7.org/owl/rim/> . 
+@prefix dcterms: <http://purl.org/dc/terms/> . 
+@prefix vs:    <http://hl7.org/orim/valueset/> . 
+@prefix loinc: <http://loinc.org/rdf#> . 
+@prefix w5:    <http://hl7.org/fhir/w5#> . 
+@prefix dc:    <http://purl.org/dc/elements/1.1/> . 
+
+ fhir:Observation.basedOn.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Observation.basedOn  fhir:Reference.type ) .
+
+ fhir:Observation.basedOn rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Observation.basedOn.type  ;
+	owl:someValuesFrom fhir:CarePlan ;
+	owl:someValuesFrom fhir:DeviceRequest ;
+	owl:someValuesFrom fhir:ImmunizationRecommendation ;
+	owl:someValuesFrom fhir:MedicationRequest ;
+	owl:someValuesFrom fhir:NutritionOrder ;
+	owl:someValuesFrom fhir:ServiceRequest ] . 
+
+ fhir:Observation.partOf.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Observation.partOf  fhir:Reference.type ) .
+
+ fhir:Observation.partOf rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Observation.partOf.type  ;
+	owl:someValuesFrom fhir:MedicationAdministration ;
+	owl:someValuesFrom fhir:MedicationDispense ;
+	owl:someValuesFrom fhir:MedicationStatement ;
+	owl:someValuesFrom fhir:Procedure ;
+	owl:someValuesFrom fhir:Immunization ;
+	owl:someValuesFrom fhir:ImagingStudy ] . 
+
+ fhir:Observation.subject.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Observation.subject  fhir:Reference.type ) .
+
+ fhir:Observation.subject rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Observation.subject.type  ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:Group ;
+	owl:someValuesFrom fhir:Device ;
+	owl:someValuesFrom fhir:Location ] . 
+

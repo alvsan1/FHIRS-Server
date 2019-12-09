@@ -1,4 +1,4 @@
-@prefix fhir: <http://hl7.org/fhir/> .doco
+@prefix fhir: <http://hl7.org/fhir/> 
 
 
 [ a fhir:Observation;
@@ -7,12 +7,12 @@
   # from Resource: .id, .meta, .implicitRules, and .language
   # from DomainResource: .text, .contained, .extension, and .modifierExtension
 #  fhir:Observation.identifier [ Identifier ], ... ; # 0..* Business Identifier for observation
-#  fhir:Observation.basedOn [ Reference(CarePlan|DeviceRequest|ImmunizationRecommendation|MedicationRequest|NutritionOrder|ServiceRequest) ], ... ; # 0..* Fulfills plan, proposal or order
-#  fhir:Observation.partOf [ Reference(MedicationAdministration|MedicationDispense|MedicationStatement|Procedure|Immunization|ImagingStudy) ], ... ; # 0..* Part of referenced event
-#  fhir:Observation.status [ code ]; # 1..1 registered | preliminary | final | amended +
+  fhir:Observation.basedOn [ Reference(CarePlan|DeviceRequest|ImmunizationRecommendation|MedicationRequest|NutritionOrder|ServiceRequest) ], ... ; # 0..* Fulfills plan, proposal or order
+  fhir:Observation.partOf [ Reference(MedicationAdministration|MedicationDispense|MedicationStatement|Procedure|Immunization|ImagingStudy) ], ... ; # 0..* Part of referenced event
+  fhir:Observation.status [ code ]; # 1..1 registered | preliminary | final | amended +
 #  fhir:Observation.category [ CodeableConcept ], ... ; # 0..* Classification of  type of observation
-        #  fhir:Observation.code [ CodeableConcept ]; # 1..1 Type of observation (code / type)
-        #  fhir:Observation.subject [ Reference(Patient|Group|Device|Location) ]; # 0..1 Who and/or what the observation is about
+  fhir:Observation.code [ CodeableConcept ]; # 1..1 Type of observation (code / type)
+  fhir:Observation.subject [ Reference(Patient|Group|Device|Location) ]; # 0..1 Who and/or what the observation is about
 #  fhir:Observation.focus [ Reference(Any) ], ... ; # 0..* What the observation is about, when it is not about the subject of record
 #  fhir:Observation.encounter [ Reference(Encounter) ]; # 0..1 Healthcare event during which this observation is made
   # Observation.effective[x] : 0..1 Clinically relevant time/time-period for observation. One of these 4
@@ -23,7 +23,7 @@
 #  fhir:Observation.issued [ instant ]; # 0..1 Date/Time this version was made available
 #  fhir:Observation.performer [ Reference(Practitioner|PractitionerRole|Organization|CareTeam|Patient|RelatedPerson) ], ... ; # 0..* Who is responsible for the observation
   # Observation.value[x] : 0..1 Actual result. One of these 11
-    fhir:Observation.valueQuantity [ Quantity ];
+    fhir:Observation.valueQuantity [ Quantity ]
 #    fhir:Observation.valueCodeableConcept [ CodeableConcept ]
 #    fhir:Observation.valueString [ string ]
 #    fhir:Observation.valueBoolean [ boolean ]

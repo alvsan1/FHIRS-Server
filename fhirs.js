@@ -487,6 +487,21 @@ function addConcept(path){
   var jsonFile = {};
   var uiFile = {};
   var rulesFile = [];
+  var referencesFile = "@prefix fhir:  <http://hl7.org/fhir/> . \n" +
+  "@prefix owl:   <http://www.w3.org/2002/07/owl#> . \n" +
+  "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> . \n" +
+  "@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> . \n" +
+  "@prefix dt:    <http://hl7.org/orim/datatype/> . \n" +
+  "@prefix cs:    <http://hl7.org/orim/codesystem/> . \n" +
+  "@prefix fhir-vs: <http://hl7.org/fhir/ValueSet/> . \n" +
+  "@prefix ex:    <http://hl7.org/fhir/StructureDefinition/> . \n" +
+  "@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . \n" +
+  "@prefix rim:   <http://hl7.org/owl/rim/> . \n" +
+  "@prefix dcterms: <http://purl.org/dc/terms/> . \n" +
+  "@prefix vs:    <http://hl7.org/orim/valueset/> . \n" +
+  "@prefix loinc: <http://loinc.org/rdf#> . \n" +
+  "@prefix w5:    <http://hl7.org/fhir/w5#> . \n" +
+  "@prefix dc:    <http://purl.org/dc/elements/1.1/> . \n\n";
 
   rd.on('line', function(line) {
       let resultJson = fhirsConceptTurtleToSchemaLine(conceptName, modelo, line);
@@ -496,10 +511,23 @@ function addConcept(path){
       //console.log(resultJson.lenght !== undefined)
       if (resultJson != null ){
         if ( jsonFile.properties != undefined && jsonFile.properties.length != 0 ){
-    //      console.log(jsonFile);
+      //    console.log(jsonFile);
       //    console.log(Object.keys(jsonFile).lenght);
           //console.log("****************hhhhhhhhhhhhhhhhhhhh      "+ conceptName +"   " + line + "**********************************");
-          Object.assign(jsonFile.properties, resultJson.properties)
+          let jsonFilePointer = jsonFile.properties;
+          let resultJsonPointer = resultJson.properties;
+          //console.log("resultJsonPointer  :"+resultJsonPointer);
+          let endParameter = false;
+          while (!endParameter){
+            if (jsonFilePointer[Object.keys(resultJsonPointer)[0]] != undefined && resultJsonPointer[Object.keys(resultJsonPointer)[0]]["items"] != undefined){
+              jsonFilePointer = jsonFilePointer[Object.keys(resultJsonPointer)[0]]["items"]["properties"];
+              resultJsonPointer = resultJsonPointer[Object.keys(resultJsonPointer)[0]]["items"]["properties"];
+            }else{
+              endParameter = true;
+            }
+          }
+
+          Object.assign(jsonFilePointer, resultJsonPointer);
         }
         else {
           //console.log("****************kkkkkkkkkkkkkkkkkkkkkkkkk      "+ conceptName +"   " + line + "**********************************");
@@ -542,22 +570,36 @@ function addConcept(path){
           } 
           ///////////REVISA SI YA TENIA UNA DEFINICIONES /////////////////////////////
           if ( uiFile != undefined ){
-            Object.assign(uiFile , resultJson.ui);
+         
+            let uiFilePointer = uiFile;
+            let resultUIPointer = resultJson.ui;
+            //console.log("resultJsonPointer  :"+resultJsonPointer);
+            let endParameter = false;
+            while (!endParameter){
+              if (uiFilePointer[Object.keys(resultUIPointer)[0]] != undefined && resultUIPointer[Object.keys(resultUIPointer)[0]]["items"] != undefined){
+                uiFilePointer = uiFilePointer[Object.keys(resultUIPointer)[0]]["items"];
+                resultUIPointer = resultUIPointer[Object.keys(resultUIPointer)[0]]["items"];
+              }else{
+                endParameter = true;
+              }
+            }
+            Object.assign(uiFilePointer, resultUIPointer);
+            //Object.assign(uiFile , resultJson.ui);
           }else{
             uiFile = resultJson.ui;
           }
           //console.log("****************" +"definitions" +"**********************************");          
         }
         //console.log("****************" +"definitions" +"**********************************");          
-        //console.log(jsonFile)d
+        //console.log(jsonFile)
 
         if (resultJson.rules  != undefined ){
           if (resultJson.rules.length == 0 ){
             
           } 
-          ///////////REVISA SI YA TENIA UNA DEFINICIONES /////////////////////////////
+          ///////////REVISA SI YA TENIA REGLAS /////////////////////////////
           if ( rulesFile != undefined ){
-            Object.assign(rulesFile , resultJson.rules);
+            rulesFile = rulesFile.concat(resultJson.rules);
           }else{
             rulesFile = resultJson.rules;
           }
@@ -566,6 +608,29 @@ function addConcept(path){
 //          console.log("*************RULESSSSSSSSSSS*************SSSSS****************");
 //          console.log(resultJson.rules);
           //console.log("****************" +"definitions" +"**********************************");          
+        }
+
+
+        if (resultJson.references  != undefined ){
+          //console.log("referencesFile---------------------------------------------------");
+          //console.log(referencesFile);
+          for (var i=0; i<resultJson.references.length; i++){
+              var parameterReference = resultJson.references[i].title +".type a owl:ObjectProperty ;\n\towl:propertyChainAxiom ( "+ resultJson.references[i].title +"  fhir:Reference.type ) .\n";
+              var restrictionReference = resultJson.references[i].title +" rdfs:subClassOf [ \n\ta owl:Restriction ;\n\towl:onProperty "+ resultJson.references[i].title +".type "
+              
+              console.log("references---------------------------------------------------");
+              console.log(referencesFile);
+          
+
+              for (var j=0; j<resultJson.references[i].concept.length; j++){
+                restrictionReference = restrictionReference.concat(" ;\n\towl:someValuesFrom " + resultJson.references[i].concept[j]);
+              }
+              restrictionReference = restrictionReference.concat( " ] . \n\n");
+
+              referencesFile = referencesFile.concat(parameterReference +"\n" + restrictionReference);
+          };
+          console.log(referencesFile);
+                   
         }
 
       }
@@ -595,7 +660,13 @@ function addConcept(path){
     //console.log(dataRules); 
     fs.writeFileSync("../FHIRS_Client/rules/"+conceptName+'.json', dataRules);
 
-    var server = restify.serve(router, mongoose.model(conceptName, modelo), options)
+    var server = restify.serve(router, mongoose.model(conceptName, modelo), options);
+
+
+    //console.log("*************References****************");
+    //console.log("*************References****************");
+    //console.log("*************References****************");
+    fs.writeFileSync("references/"+conceptName+'.ttl', referencesFile);
 
   });
  
@@ -670,7 +741,7 @@ function addDataType(path){
   rd.on('close', function() {
     //console.log("****************hhhhhhhhhhhhhhhhhhhh**********************************");
     //console.log(jsonFile);
-    jsonFile = Object.assign(jsonFile, {title: dataTypeName, type: "object"})
+    jsonFile = Object.assign(jsonFile, {title: dataTypeName, type: "object"});
 
 
     'use strict';
@@ -690,38 +761,90 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
   //console.log(conceptName);
 
 
-  let regexp = new RegExp(".*fhir:"+conceptName+"\\.(.*) \\[ (.*) \\](, \\.\\.\\.|;) .*# (.*)?");
-  let result = line.match(regexp);
-  if (!(result == null || result == undefined)) {
+  let regexpParam = new RegExp("^\\s*fhir:"+conceptName+"\\.(.*) \\[ ((.*) \\]((, \\.\\.\\.|;) .*# (.*)?)?)?");
+  let resultParam = line.match(regexpParam);
+  if (!(resultParam == null || resultParam == undefined)) {
     //console.log(result);
     //console.log(result[1]);
     
 
+    //Definition of parse line.
+    let stringExp = resultParam[0];
+    let parameter = resultParam[1];//Parameter in line of conceptName.
+    let parameterType = resultParam[3];//Type of parameter, it will be definition or datatype.
+    let multiplicityParameter = resultParam[5];//Multiplicity of parmeter.
+    let codesParameter = resultParam[6];
 
-    let parameter = result[1];
-    let jsonObj = {};
-    let schemaJson = {};
+
+
+    //Definition the objects of definitions by the schemas
+    let jsonObj = {}; //Object by mongodb.
+    
     let valParameter = null;
     let schemaParameter = null;
+    
 
+
+    let schemaJson = {};
+    schemaJson["properties"] = {};
+    schemaJson["ui"] = {};
+    schemaJson["references"] = [];
+    let schemaJsonPointer = schemaJson["properties"];
+    let schemaJsonUIPointer = schemaJson["ui"];
+
+    ////////////////////////////////////////////////////////////
+    // Mejorar la redaccion
+    ///////////////////////////////////////////////////////////
+    //Analyze subparameters and pointer in the jsons place.
+    let parametersLeft = parameter.split(".");
+    if(parametersLeft.length > 1) {
+      for (var indexParameterLeft in parametersLeft ){
+        if( indexParameterLeft < (parametersLeft.length-1) ){
+          schemaJsonPointer[parametersLeft[indexParameterLeft]]={};
+          schemaJsonPointer[parametersLeft[indexParameterLeft]]["items"] = {};
+          schemaJsonPointer[parametersLeft[indexParameterLeft]]["items"]["properties"] = {};
+          schemaJsonPointer = schemaJsonPointer[parametersLeft[indexParameterLeft]]["items"]["properties"];  
+
+          schemaJsonUIPointer[parametersLeft[indexParameterLeft]]={};
+          schemaJsonUIPointer[parametersLeft[indexParameterLeft]]["items"] = {};
+          schemaJsonUIPointer = schemaJsonUIPointer[parametersLeft[indexParameterLeft]]["items"];       
+        }else if (indexParameterLeft == (parametersLeft.length-1) ) {
+          //Revisar por que seteo el parametro de entrada.
+          parameter = parametersLeft[indexParameterLeft];
+        }
+      };
+    }
+
+//    if (parametersLeft.length > 1 ){
+
+//    }
 
     switch (true) {
-      case /^ *#.*/.test(result[0]):
+      case (parameterType == undefined ):
+        //console.log("• Array =???????????????????????????");
+//        console.log(stringExp);
+//        console.log(parameter);
+        schemaParameter = {"type": "array",  "items": {"type": "object" , "properties":{} }};
+//        console.log(schemaParameter);
+        schemaJsonPointer[parameter] = schemaParameter;
+
+        break;
+      case /^ *#.*/.test(stringExp):
         //////////////////////////////
         ////   PRINT BY SÉE result
         //////////////////////////////
         //console.log("• Matched Commment in code");
         break;
-      case /code/.test(result[2]):
-        //console.log("• Matched code DataType");
-        //console.log(result[4]);
-        let matchResult = result[4].match(/\d (.*)/);
+      case /code/.test(parameterType):
+        console.log("• Matched code Code");
+        //console.log(codesParameter);
+        let matchResult = codesParameter.match(/\d (.*)/);
         let codes = [];
         if (matchResult != null){
           codes = matchResult[1].split(" | ");
         }
         if ( codes.length > 1 ){//Si es uno no tengo el enumerado aunque sea 1.
-          if ( result[3] == ", ..."){
+          if ( multiplicityParameter == ", ..."){
             valParameter = {type: [String],
                             enum: codes};
             schemaParameter = {type: "array",
@@ -737,13 +860,13 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             valParameter = {type: String};
             schemaParameter = {type: "string"};
         }
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /string/.test(result[2]):
+      case /string/.test(parameterType):
         //console.log("• Matched code string");
-        if ( result[3] == ", ..."){
+        if ( multiplicityParameter == ", ..."){
           valParameter = {type: [String]}
           schemaParameter = {type: "array",
                              items: {type: "string"
@@ -752,13 +875,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           valParameter = {type: String};
           schemaParameter = {type: "string"};
         }
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /boolean/.test(result[2]):
+      case /boolean/.test(parameterType):
         //console.log("• Matched code string");
-        if ( result[3] == ", ..."){
+        if ( multiplicityParameter == ", ..."){
           valParameter = {type: Boolean};
           schemaParameter = {type: "array",
                              itmes: {type: "boolean"
@@ -768,13 +890,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           schemaParameter = {type: "boolean"};
         }
         
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /decimal/.test(result[2]):
+      case /decimal/.test(parameterType):
         //console.log("• Matched code string");
-        if ( result[3] == ", ..."){
+        if ( multiplicityParameter == ", ..."){
           valParameter = {type: Number};
           schemaParameter = {type: "array",
                              itmes: {type: "number"
@@ -784,13 +905,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           schemaParameter = {type: "number"};
         }
         
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /positiveInt/.test(result[2]):
+      case /integer/.test(parameterType):
         //console.log("• Matched code string");
-        if ( result[3] == ", ..."){
+        if ( multiplicityParameter == ", ..."){
           valParameter = {type: Number};
           schemaParameter = {type: "array",
                              itmes: {type: "number"
@@ -800,13 +920,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           schemaParameter = {type: "number"};
         }
         
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /unsignedInt/.test(result[2]):
+      case /positiveInt/.test(parameterType):
         //console.log("• Matched code string");
-        if ( result[3] == ", ..."){
+        if ( multiplicityParameter == ", ..."){
           valParameter = {type: Number};
           schemaParameter = {type: "array",
                              itmes: {type: "number"
@@ -816,91 +935,98 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           schemaParameter = {type: "number"};
         }
         
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /dateTime/.test(result[2]):
+      case /unsignedInt/.test(parameterType):
+        //console.log("• Matched code string");
+        if ( multiplicityParameter == ", ..."){
+          valParameter = {type: Number};
+          schemaParameter = {type: "array",
+                             itmes: {type: "number"
+                           }};
+        }else{
+          valParameter = {type: Number};
+          schemaParameter = {type: "number"};
+        }
+        
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
+        break;
+      case /dateTime/.test(parameterType):
         //console.log("• Matched code string");
         valParameter = {type: Date};
         schemaParameter = {type: "string", format: "date-time"}
 
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
 
         break;
-      case /date/.test(result[2]):
+      case /date/.test(parameterType):
         //console.log("• Matched code string");
         valParameter = {type: Date};
         
 
-        jsonObj[result[1]] = valParameter;
+        jsonObj[parameter] = valParameter;
         schemaParameter = {type: "string", format: "date"}
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
 
         break;        
-      case /uri/.test(result[2]):
+      case /uri/.test(parameterType):
         //console.log("• Matched uri DataType");
-        if ( result[3] == ", ..."){
+       if ( multiplicityParameter == ", ..."){
           valParameter = {type: [String]}
           schemaParameter = {type: "array",
                              items: {type: "string"
                            }};
         }else{
-          valParameter = {type: String,
-                          validate: require('mongoose-validators').isURL()};
+          valParameter = {type: String, 
+                        validate: require('mongoose-validators').isURL()};
           schemaParameter = {type: "string"};
         }
-        jsonObj[result[1]] = valParameter;
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
-
+        jsonObj[parameter] = valParameter;
+        schemaJsonPointer[parameter] = schemaParameter;
         break;
-      case /base64Binary/.test(result[2]):
+      case /base64Binary/.test(parameterType):
         //console.log("• Matched uri DataType");
         valParameter = {type: String}
-        jsonObj[result[1]] = valParameter;
+        jsonObj[parameter] = valParameter;
 
-        schemaParameter = {type: "string", format: "data-url", title:result[1]}
-        schemaJson["properties"] = {};
-        schemaJson["properties"][result[1]] = schemaParameter;
+        schemaParameter = {type: "string", format: "data-url", title:parameter}
+        schemaJsonPointer[parameter] = schemaParameter;
 
         break;
-      case /Reference.*/.test(result[2]):
+      case /Reference.*/.test(parameterType):
         console.log("• Matched Reference");
-        let objectReference = result[2].match(new RegExp("Reference.(.*)."))[1];
-        //console.log(objectReference);
+        let objectReference = parameterType.match(new RegExp("Reference.(.*)."))[1];
+        console.log(objectReference);
         refs = objectReference.match(new RegExp("([A-Za-z]*\\|[A-Za-z]*)"));
-        //console.log("*****************Refs*******************");
-        //console.log(refs);
+        console.log("*****************Refs*******************");
+        console.log(refs);
 
+        //Si tiene mas de una referencia
         if (refs == null ){
           let autocomplete = {};
-          if ( result[3] == ", ..."){
+
+          if ( multiplicityParameter == ", ..."){
             valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
             valParameter["className"] = objectReference;
-            jsonObj[result[1]] = valParameter; 
+            jsonObj[parameter] = valParameter; 
 
 
             //Create the Schema client
             schemaParameter = {type: "string"};
-            schemaJson["properties"] = {};
-            schemaJson["properties"][result[1]] = { "type": "array",
-                                                    "title": result[1], 
+            schemaJsonPointer[parameter] = { "type": "array",
+                                                    "title": parameter, 
                                                     items: schemaParameter };
-
-
-
 
             //Create the UI Schema 
             let optionsAutocomplete;
-            let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
-            //let paramMaps = result[1] + "_id";
+            let conceptRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
+            //let paramMaps = parameter + "_id";
             autocomplete = { items: {"ui:field": "asyncTypeahead",
                                           "asyncTypeahead": {
-                                            "url": "http://192.168.0.109:4000/api/v/" + domRequest + "?select=id",
+                                            "url": "http://192.168.0.107:4000/api/v/" + conceptRequest + "?select=id",
                                             isLoading: false,
                                             options : optionsAutocomplete,
                                             labelKey: "_id",
@@ -908,24 +1034,26 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
                                           }
                                         }
                                       };
+
             
+            schemaJson["references"].push({"title": " fhir:" + conceptName + "."+ resultParam[1], "concept":["fhir:"+objectReference]});
+
           }else{
             valParameter = { type: Schema.Types.ObjectId, ref: objectReference }
             valParameter["className"] = objectReference;
-            jsonObj[result[1]] = valParameter;
+            jsonObj[parameter] = valParameter;
 
             //Create the Schema client
             schemaParameter = { type: "string"};
-            schemaJson["properties"] = {};
-            schemaJson["properties"][result[1]] = schemaParameter;
+            schemaJsonPointer[parameter] = schemaParameter;
 
             //Create the UI Schema 
             let optionsAutocomplete;
             let domRequest = objectReference[0].toLowerCase() + objectReference.substring(1)
-            //let paramMaps = result[1] + "_id";
+            //let paramMaps = parameter + "_id";
             autocomplete = {"ui:field": "asyncTypeahead",
                                   "asyncTypeahead": {
-                                    "url": "http://192.168.0.109:4000/api/v/" + domRequest + "?select=id",
+                                    "url": "http://192.168.0.107:4000/api/v/" + domRequest + "?select=id",
                                     isLoading: false,
                                     options : optionsAutocomplete,
                                     labelKey: "_id",
@@ -933,35 +1061,37 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
                                   }      
                                 };
 
+            schemaJson["references"].push({"title": " fhir:" + conceptName + "."+ resultParam[1], "concept":["fhir:"+objectReference]}); 
+
           }
 
                     
-          schemaJson["ui"] = {};
-          schemaJson["ui"][result[1]] = autocomplete;
+          schemaJsonUIPointer[parameter] = autocomplete;
+
+          
 
 
-        }else{
+        }else{ //Contains multiple references 
             
         //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
-        //  jsonObj[result[1]] = [valParameter];
+        //  jsonObj[parameter] = [valParameter];
 
           //Create the schema server
           //valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
 
           let listRefs = objectReference.split("|")
 
-          valParameter = { type: Schema.Types.ObjectId, refPath: 'dynamicModelType'};
+          valParameter = { type: Schema.Types.ObjectId, refPath: 'dynamicModelType'+parameter};
           //Set the class name is "dynamicModelType".
           valParameter["className"] = "dynamicModelType";
-          jsonObj[result[1]] = valParameter; 
+          jsonObj[parameter] = valParameter; 
 
           let dmType = { type: String, enum:  listRefs };
-          jsonObj["dynamicModelType"] = dmType;
+          jsonObj["dynamicModelType"+parameter] = dmType;
 
           //Create the Schema client
-          schemaDynamicParameter = {type: "string", "title": "Class "+ result[1],enum: listRefs};
-          schemaJson["properties"] = {};
-          schemaJson["properties"]["dynamicModelType"] = schemaDynamicParameter;
+          schemaDynamicParameter = {type: "string", "title": "Type of "+ parameter,enum: listRefs};
+          schemaJsonPointer["dynamicModelType"+parameter] = schemaDynamicParameter;
 
           //Dynamic Parameter
           //schemaJson["properties"]["dynamicModelType"]["onChange"] = onChangeDynamic;
@@ -977,7 +1107,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
                 //}
               //}
             //}
-            //nodeDp["properties"][result[1]] =  { type: "string"};
+            //nodeDp["properties"][parameter] =  { type: "string"};
             //listDependecies[indixDp] = nodeDp;
             //indixDp++;  
           //}
@@ -990,7 +1120,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           //Rules
 
           schemaParameter = { type: "string"};         
-          schemaJson["properties"][result[1]] = schemaParameter;
+          schemaJsonPointer[parameter] = schemaParameter;
           
          
           //Create the UI Schema 
@@ -1007,55 +1137,63 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
                                 }
                               };
 
-          schemaJson["ui"] = {};
-          schemaJson["ui"][result[1]] = autocomplete;
+          schemaJsonUIPointer[parameter] = autocomplete;
 
+          let sentenceRefs = [];
           //Create rules 
           let rules = [];
           listRefs.forEach( function(element){
 
             let parameterCond = {};
-            parameterCond["dynamicModelType"] = { "is": element };
+            parameterCond["dynamicModelType"+parameter] = { "is": element };
             let ruleConcept = {};          
             ruleConcept["conditions"] = parameterCond;
 
             let conceptURL = element[0].toLowerCase() + element.substring(1)
-            let ruteURL = "http://192.168.0.9:4000/api/v/"+conceptURL+"?select=id";            
+            let ruteURL = "http://192.168.0.7:4000/api/v/"+conceptURL+"?select=id";            
             let parameterEvent = {};
-            parameterEvent[result[1]] = { "asyncTypeahead": { "url": ruteURL}}; 
+            parameterEvent[parameter] = { "asyncTypeahead": { "url": ruteURL}}; 
             ruleConcept["event"] = { "type": "uiAppend", "params": parameterEvent};
 
             rules.push(ruleConcept);
+
+            sentenceRefs.push("fhir:"+element);
+
           });
 
+
+          schemaJson["references"].push({"title": " fhir:" + conceptName + "."+ resultParam[1], "concept":sentenceRefs});
+
+
+
+          console.log("schemaJson[rules] " + schemaJson["rules"]);
           schemaJson["rules"] = rules;
 
         }
         //console.log(valParameter);
-        break;       
+        break;          
       default:
         //Is a dataType
         console.log("• Didn't match first level");
-        valParameter = require('mongoose').model(result[2]).schema
+        valParameter = require('mongoose').model(parameterType).schema
         if ( valParameter == null ){
           valParameter = String;
         } else {
           //console.log("• Is DataType Valid.");
-          console.log(result[2]);
+          console.log(parameterType);
 
-          //console.log("////////** ira aca ??? ***  "+result[2] +"//////////");
+          //console.log("////////** ira aca ??? ***  "+parameterType +"//////////");
           //Set the class name.
-          valParameter["className"] = result[2];
-          jsonObj[result[1]] = valParameter; 
+          valParameter["className"] = parameterType;
+          jsonObj[parameter] = valParameter; 
 
           //Add reference at schema UI
-          schemaParameter = {$ref: "#/definitions/"+result[2], title: result[1]};
-          schemaJson["properties"] = {};
-          schemaJson["properties"][result[1]] = schemaParameter;
+          schemaParameter = {$ref: "#/definitions/"+parameterType, title: parameter};
+          schemaJsonPointer[parameter] = schemaParameter;
 
           //Add definitions of the reference.
           schemaJson["definitions"] = {};
-          schemaJson["definitions"][result[2]] = {};         
+          schemaJson["definitions"][parameterType] = {};         
           
         }
         break;

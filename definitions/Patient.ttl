@@ -12,7 +12,7 @@
   fhir:Patient.gender [ code ]; # 0..1 male | female | other | unknown
   fhir:Patient.birthDate [ date ]; # 0..1 The date of birth for the individual
   # Patient.deceased[x] : 0..1 Indicates if the individual is deceased or not. One of these 2
-    fhir:Patient.deceasedBoolean [ boolean ]; # 0..1 Whether this patient's record is in active use
+    fhir:Patient.deceasedBoolean [ boolean ]
     fhir:Patient.deceasedDateTime [ dateTime ]
   fhir:Patient.address [ Address ], ... ; # 0..* Addresses for the individual
   fhir:Patient.maritalStatus [ CodeableConcept ]; # 0..1 Marital (civil) status of a patient

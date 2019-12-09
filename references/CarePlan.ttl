@@ -1,0 +1,117 @@
+@prefix fhir:  <http://hl7.org/fhir/> . 
+@prefix owl:   <http://www.w3.org/2002/07/owl#> . 
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix dt:    <http://hl7.org/orim/datatype/> . 
+@prefix cs:    <http://hl7.org/orim/codesystem/> . 
+@prefix fhir-vs: <http://hl7.org/fhir/ValueSet/> . 
+@prefix ex:    <http://hl7.org/fhir/StructureDefinition/> . 
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . 
+@prefix rim:   <http://hl7.org/owl/rim/> . 
+@prefix dcterms: <http://purl.org/dc/terms/> . 
+@prefix vs:    <http://hl7.org/orim/valueset/> . 
+@prefix loinc: <http://loinc.org/rdf#> . 
+@prefix w5:    <http://hl7.org/fhir/w5#> . 
+@prefix dc:    <http://purl.org/dc/elements/1.1/> . 
+
+ fhir:CarePlan.basedOn.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.basedOn  fhir:Reference.type ) .
+
+ fhir:CarePlan.basedOn rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.basedOn.type  ;
+	owl:someValuesFrom fhir:CarePlan ] . 
+
+ fhir:CarePlan.replaces.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.replaces  fhir:Reference.type ) .
+
+ fhir:CarePlan.replaces rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.replaces.type  ;
+	owl:someValuesFrom fhir:CarePlan ] . 
+
+ fhir:CarePlan.partOf.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.partOf  fhir:Reference.type ) .
+
+ fhir:CarePlan.partOf rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.partOf.type  ;
+	owl:someValuesFrom fhir:CarePlan ] . 
+
+ fhir:CarePlan.subject.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.subject  fhir:Reference.type ) .
+
+ fhir:CarePlan.subject rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.subject.type  ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:Group ] . 
+
+ fhir:CarePlan.encounter.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.encounter  fhir:Reference.type ) .
+
+ fhir:CarePlan.encounter rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.encounter.type  ;
+	owl:someValuesFrom fhir:Encounter ] . 
+
+ fhir:CarePlan.author.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.author  fhir:Reference.type ) .
+
+ fhir:CarePlan.author rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.author.type  ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:Practitioner ;
+	owl:someValuesFrom fhir:PractitionerRole ;
+	owl:someValuesFrom fhir:Device ;
+	owl:someValuesFrom fhir:RelatedPerson ;
+	owl:someValuesFrom fhir:Organization ;
+	owl:someValuesFrom fhir:CareTeam ] . 
+
+ fhir:CarePlan.contributor.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.contributor  fhir:Reference.type ) .
+
+ fhir:CarePlan.contributor rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.contributor.type  ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:Practitioner ;
+	owl:someValuesFrom fhir:PractitionerRole ;
+	owl:someValuesFrom fhir:Device ;
+	owl:someValuesFrom fhir:RelatedPerson ;
+	owl:someValuesFrom fhir:Organization ;
+	owl:someValuesFrom fhir:CareTeam ] . 
+
+ fhir:CarePlan.careTeam.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.careTeam  fhir:Reference.type ) .
+
+ fhir:CarePlan.careTeam rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.careTeam.type  ;
+	owl:someValuesFrom fhir:CareTeam ] . 
+
+ fhir:CarePlan.addresses.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.addresses  fhir:Reference.type ) .
+
+ fhir:CarePlan.addresses rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.addresses.type  ;
+	owl:someValuesFrom fhir:Condition ] . 
+
+ fhir:CarePlan.supportingInfo.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.supportingInfo  fhir:Reference.type ) .
+
+ fhir:CarePlan.supportingInfo rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.supportingInfo.type  ;
+	owl:someValuesFrom fhir:Any ] . 
+
+ fhir:CarePlan.goal.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:CarePlan.goal  fhir:Reference.type ) .
+
+ fhir:CarePlan.goal rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:CarePlan.goal.type  ;
+	owl:someValuesFrom fhir:Goal ] . 
+
