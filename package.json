@@ -27,7 +27,7 @@
     "method-override": "^2.3.10",
     "mongoose": "^5.2.10",
     "mongoose-validators": "^0.1.0",
-    "node-fetch": "^2.3.0",
+    "node-fetch": "^2.6.1",
     "valid-url": "^1.0.9"
   },
   "homepage": "https://github.com/alvsan1/FHIRS#readme",
