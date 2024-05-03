@@ -53,6 +53,7 @@ function addModels(path){
   });
 
 
+  //To do : Por que no incluirlo en el for anterior
   fs.readdir(path, function(err, items) {
    
       for (var i=0; i<items.length; i++) {
@@ -82,70 +83,22 @@ function addDefinitions(conceptName){
 
   const fs = require('fs');  
 
-  let rawdata = fs.readFileSync("../FHIRS_Client/definitions/"+conceptName+'.json');  
-  let objJson = JSON.parse(rawdata);  
-  //console.log("*************************************************");
-  //console.log(conceptName);  
-  //console.log(objJson.definitions);  
-
+  let objJson = JSON.parse(fs.readFileSync("../FHIRS_Client/definitions/"+conceptName+'.json'));  
   for(var i in objJson.definitions){
     var key = i;
-    //console.log(i);
     let relationJson = JSON.parse(fs.readFileSync("../FHIRS_Client/definitions/"+i+'.json'));
-    //console.log(relationJson);
     if (relationJson.definitions != undefined){
       for (var definition in relationJson.definitions ){
-        //console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-        //console.log(definition)
-        //let definitionJson = JSON.parse(fs.readFileSync("../FHIRS_Client/definitions/"+definition+'.json'));     
-            
         objJson.definitions[definition] = relationJson.definitions[definition];
-
-
-/*
-        if (definitiosAux != undefined ){
-                
-        }
-        
-        objJson.definitions[i] = definitionJson;
-        
-        if (definitiosAux != undefined ){
-          for(var i in definitiosAux){
-            objJson.definitions[i] = definitiosAux[i];
-          }
-        }
-
-        */
-        //console.log(definitiosAux);
 
       }
       delete relationJson["definitions"];
     }
     objJson.definitions[i] = relationJson;
-    /*for(var j in val){
-        var sub_key = j;
-        var sub_val = val[j];
-        console.log(sub_key);
-    }*/
   }
 
-  //console.log("****************addDefinitions**********************************");
-  //console.log(objJson);
-
-
-    'use strict';
-    let data = JSON.stringify(objJson);  
-    
-    fs.writeFileSync("../FHIRS_Client/definitions/"+conceptName+'.json', data);
-  //console.log(jsonFile);
-  
-
-
-  /*jsonFile = Object.assign(jsonFile, {title: conceptName, type: "object"})
-
-
-  
-*/
+  let data = JSON.stringify(objJson);  
+  fs.writeFileSync("../FHIRS_Client/definitions/"+conceptName+'.json', data);
 }
 
 function addDataTypes(path){ 
@@ -192,118 +145,28 @@ function addDataTypes(path){
 
 function addConcept(path){
 
-  //var fs = require('fs'),
-    //readline = require('readline');
-
   options={version:"/v" , postCreate: (req, res, next) => {
-      //console.log("ldldl");
-      //console.log(req.erm.result);
-//let context = {"fhir":"http://hl7.org/fhir/",
-//"identifier": "fhir:Specimen.identifier",
-//"status": "fhir:Specimen.status",
-  //"subject":"fhir:Specimen.subject",
-  //"request": "fhir:Specimen.request",
-  //"processing": "fhir:Specimen.processing",
-  //"processing.additive": "fhir:Specimen.processing.additive"};
-
-  //////////////////////////////////////////////////////////////////////////
-  //**************************************************************************
-      ///////////////////////Asincronico///////////////////////////////
-//*******************************************************************************
-//////////////////////////////////////////////////////////////////////////////
-      //console.log(req['originalUrl']);
-      //let compacted = JSON.stringify(req.erm.result);
-      //let compacted = req.erm.result;
-      //console.log(compacted);
 
       let regexp = new RegExp(".*\/(.*)$");
       let result = req['originalUrl'].match(regexp);
-      //console.log(result);
       let conceptName = result[1];
-
-      /*
-
-      function jsonldparse(conceptName, compacted, context, param, jsonIn){
-        console.log("****************************************")
-        console.log(ConceptName);
-        console.log(param);
-        //console.log(JSON.parse(JSON.stringify(req.erm.result))[param]);
-
-        ------>>> let conceptSchema = require('mongoose').model(conceptName).schema;
-        ------>>> console.log(conceptSchema.paths[param].path);
-
-
-        //var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
-        var type = typeof JSON.parse(JSON.stringify(jsonIn))[param];
-        if (type == "number") {
-            // do stuff
-        }
-        else if (type == "string") {
-            console.log("------------String---------------------String---------------------");
-            console.log(param);
-            if (param === "_id"){
-              console.log("------------Id---------------------Id---------------------");
-              compacted["@id"] = "fhir:"+conceptName+"#"+Array(req.erm.result)[0]["_id"];
-            }else{
-              context[param] = "fhir:"+conceptName+"."+param;
-            }
-            // do stuff
-        }
-        else if (type == "object") { // either array or object
-          console.log("*****************************Object***************************");
-          let compactedObject = {};
-
-          Object.keys( param ).forEach( function(paramObject , index) {
-            jsonldparse(conceptName, compactedObject, context, paramObject);
-          });
-          //if (elem instanceof Buffer) {
-          //}
-        }
-        return param;
-      }
-
-
-      let context = {};
-      let jsonIn = JSON.parse(JSON.stringify(req.erm.result));
-      Object.keys(jsonIn).forEach( function(param , index) {
-          jsonldparse(conceptName, compacted, context,param, jsonIn);
-      });
-      */
-
 
       function jsonldparse(conceptName, schema ,compacted, context, paramIn, paramAcum, jsonIn){
         console.log("****************************************")
         console.log(paramIn);
         console.log(paramAcum);
-        console.log(conceptName);
-        //console.log("************jsonIn*********************")
-        //console.log(jsonIn);
-
-        //console.log("************Schema*********************")
-        //console.log(schema);
-        //console.log("****************************************")
-        
-        
+        console.log(conceptName);       
 
 
         let jsonInObject = JSON.parse(JSON.stringify(jsonIn))[paramIn];
-        //console.log(paramIn);
-        //console.log(jsonInObject);
-
-        //var type = typeof JSON.parse(JSON.stringify(req.erm.result))[param];
         var type = typeof jsonInObject;
         if (type == "number") {
-            // do stuff
+            // To do: stuff
         }
         else if (type == "string") {            
             console.log("------------String---------------------String---------------------");
 
-            //console.log(paramIn);
             if (paramIn === "_id"){
-              //console.log("------------Id---------------------Id---------------------");
-              //console.log(conceptName);              
-              
-              //compacted["@type"]= "fhir:"+conceptName;
               compacted["@id"] = "fhir:"+schema.className+"#"+Array(jsonIn)[0]["_id"];
               compacted["@type"] = ["fhir:"+schema.className, "http://www.w3.org/2002/07/owl#Thing"];
             }else{
@@ -315,50 +178,15 @@ function addConcept(path){
                 compacted["@type"] = ["fhir:"+schema.className, "http://www.w3.org/2002/07/owl#Thing"];
               }
             }
-            // do stuff
+            // To do: stuff
         }
         else if (type == "object") { // either array or object
-          console.log("****************************Object***************************");
-                    
+          console.log("****************************Object***************************");                    
           compacted[paramIn] = {};          
-          //let conceptSchema = require('mongoose').model(conceptName).schema;
-
-
-
-          //let conceptSchema = require('mongoose').model(conceptName).schema;
-          //console.log(paramIn);
-          //console.log(jsonInObject);
-          
-
-          //console.log(conceptSchema.paths[paramIn].schema.className);
-
-
-          //let classNameObject;
-          //if ( conceptSchema.paths[paramIn].schema != undefined ){
-          //    classNameObject = conceptSchema.paths[paramIn].schema.className;  
-          //}
-
-
-
           Object.keys( jsonInObject ).forEach( function(param , index) {
 
             let compactedObject = {};
             let paramSchema;
-
-            //Sentencia que debe ser corregida para que se pueda extraer el type desde el esquema.
-
-            //let conceptNameObject = paramIn[0].toUpperCase() + paramIn.substring(1);
-
-  //        console.log("--------PATH------------------");
-            
-            //compactedObject["@type"]= "fhir:"+param[0].toUpperCase() + param.substring(1);
-            
-            //console.log("-------- schema.paths ------------------");                        
-            //console.log(param);
-            //console.log("-----------------------------");
-            //console.log(schema.paths);
-            //console.log("-----------------------------");
-            
 
             if ( schema.paths[paramIn] != undefined ){
               console.log("schema.paths : " + paramIn);
@@ -368,7 +196,6 @@ function addConcept(path){
             }
             else if ( schema.paths[paramAcum+"."+param] != undefined ){
               console.log("schema.paths paramAcum: "+paramAcum+"."+param);
-              //console.log(paramAcum+"."+param);
               paramSchema = schema.paths[paramAcum+"."+param].schema
               console.log("Schema schema.paths paramAcum:");
               console.log(schema.paths[paramAcum+"."+param]);
@@ -389,15 +216,7 @@ function addConcept(path){
             }            
             compacted[paramIn] = Object.assign(compacted[paramIn],compactedObject);
           });
-          //console.log("**********"+paramIn+"*******************Object***************************");
-          //console.log(compactedObject);
-          context[paramIn] = "fhir:"+schema.className+"."+paramIn;
-          
-          //compacted[paramIn]= JSON.parse(JSON.stringify(compactedObject));
-
-
-          //if (elem instanceof Buffer) {
-          //}
+          context[paramIn] = "fhir:"+schema.className+"."+paramIn;  
         }else{
           console.log("////////////Else/////////////////");
         }
@@ -1223,27 +1042,10 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
 
 //Initial Script, 
 /////////////////
-//////////It must be parameterized
+//To do : It must be parameterized
 var pathDefinitions = "./definitions/"; //Parametro configurable
 /////////////////
 addModels(pathDefinitions);
-
-
-/*
-
-  BandSchema.virtual('members', {
-    ref: 'Person', // The model to use
-    localField: 'name', // Find people where `localField`
-    foreignField: 'band', // is equal to `foreignField`
-    // If `justOne` is true, 'members' will be a single doc as opposed to
-    // an array. `justOne` is false by default.
-    justOne: false,
-    options: { sort: { name: -1 }, limit: 5 } // Query options, see http://bit.ly/mongoose-query-options
-  });
-
-
-*/
-
 
 app.get('/', function (req, res, next) {
 
@@ -1262,10 +1064,6 @@ app.get('/', function (req, res, next) {
     return res.json({error:"No existe el schema"})
   
 
-
-/*
-   res.send({ hello: 'world' });
-   next();*/
 });
 
 /*
