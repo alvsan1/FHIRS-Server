@@ -8,6 +8,8 @@ const router = express.Router()
 const cors = require('cors');
 const jsonld = require('jsonld');
 const fetch = require('node-fetch');
+const sparqlupdate = "http://192.168.1.134:3030/fhir/?graph=http://hl7.org/fhir/"
+//const autogen = require('swagger-autogen')({openapi: '3.0.0'});
 
 
 app.use(bodyParser.json())
@@ -148,7 +150,7 @@ function addDefinitions(conceptName){
 
 function addDataTypes(path){ 
   var fs = require('fs'),
-    readline = require('readline');
+  readline = require('readline');
 
 
   fs.readdir(path, function(err, items) {
@@ -303,14 +305,14 @@ function addConcept(path){
               
               //compacted["@type"]= "fhir:"+conceptName;
               compacted["@id"] = "fhir:"+schema.className+"#"+Array(jsonIn)[0]["_id"];
-              compacted["@type"] = "fhir:"+schema.className;
+              compacted["@type"] = ["fhir:"+schema.className, "http://www.w3.org/2002/07/owl#Thing"];
             }else{
               if ( schema.ref == undefined){
                 context[paramIn] = "fhir:"+schema.className+"."+paramIn;
                 compacted[paramIn] = Array(jsonIn)[0][paramIn];
               }else{
                 compacted["@id"] = "fhir:"+schema.className+"#"+Array(jsonIn)[0][paramIn];
-                compacted["@type"] = "fhir:"+schema.className;
+                compacted["@type"] = ["fhir:"+schema.className, "http://www.w3.org/2002/07/owl#Thing"];
               }
             }
             // do stuff
@@ -442,7 +444,8 @@ function addConcept(path){
 
         console.log(JSON.stringify(expanded));
 
-        fetch("http://192.168.0.108:8080/rdf4j-server/repositories/fhir/statements", {
+        //fetch("http://192.168.1.15:8080/rdf4j-server/repositories/fhir/statements", {
+        fetch(sparqlupdate, {
           method: 'post',
           headers: {
           'Accept': 'application/json, text/plain, */*',
@@ -1026,7 +1029,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             //let paramMaps = parameter + "_id";
             autocomplete = { items: {"ui:field": "asyncTypeahead",
                                           "asyncTypeahead": {
-                                            "url": "http://192.168.0.107:4000/api/v/" + conceptRequest + "?select=id",
+                                            "url": "http://192.168.1.107:4000/api/v/" + conceptRequest + "?select=id",
                                             isLoading: false,
                                             options : optionsAutocomplete,
                                             labelKey: "_id",
@@ -1053,7 +1056,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             //let paramMaps = parameter + "_id";
             autocomplete = {"ui:field": "asyncTypeahead",
                                   "asyncTypeahead": {
-                                    "url": "http://192.168.0.107:4000/api/v/" + domRequest + "?select=id",
+                                    "url": "http://192.168.1.107:4000/api/v/" + domRequest + "?select=id",
                                     isLoading: false,
                                     options : optionsAutocomplete,
                                     labelKey: "_id",
@@ -1150,7 +1153,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             ruleConcept["conditions"] = parameterCond;
 
             let conceptURL = element[0].toLowerCase() + element.substring(1)
-            let ruteURL = "http://192.168.0.7:4000/api/v/"+conceptURL+"?select=id";            
+            let ruteURL = "http://192.168.1.107:4000/api/v/"+conceptURL+"?select=id";            
             let parameterEvent = {};
             parameterEvent[parameter] = { "asyncTypeahead": { "url": ruteURL}}; 
             ruleConcept["event"] = { "type": "uiAppend", "params": parameterEvent};
@@ -1201,7 +1204,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
 
     if (jsonObj != {}){
       //console.log("Add parameter " + jsonObj);
-
+      //To do : Se podria hacer fuera el agregado al schema mongo
       let schemaVar = require('mongoose').model(conceptName).schema.add(jsonObj);
     }
 
