@@ -143,6 +143,10 @@ function addDataTypes(path){
 
 }
 
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
 
 function addConcept(path){
 
@@ -150,18 +154,18 @@ function addConcept(path){
 
       let regexp = new RegExp(".*\/(.*)$");
       let result = req['originalUrl'].match(regexp);
-      console.log("---------------------------")
-      console.log(result[1])
+      //console.log("---------------------------")
+      //console.log(result[1])
       var conceptName = result[1];
       console.log("++++++++++++++++++++++++++ ConceptName" + conceptName)
       function jsonldparse(conceptName, schema ,compacted, context, paramIn, paramAcum, jsonIn){
         console.log("****************************************")
-        console.log(conceptName); 
-        //console.log(schema);
-        console.log(context)
-        console.log(paramIn);
-        console.log(paramAcum);
-        console.log(jsonIn)
+        console.log("///////////////// ConceptName : "+conceptName); 
+        //console.log("----------------------------- schema :" + JSON.stringify(schema));
+        //console.log("=============== context : " + JSON.stringify(context));
+        console.log("________________ paramIn : "+ paramIn);
+        console.log("#############################paramAcum"+paramAcum);
+        console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ jsonIn : " + JSON.stringify(jsonIn));
 
 
         let jsonInObject = JSON.parse(JSON.stringify(jsonIn))[paramIn];
@@ -174,26 +178,34 @@ function addConcept(path){
             //console.log("------------String---------------------String---------------------");
 
             if (paramIn === "_id"){
+              console.log("-----------1")
               if (schema != undefined){
+                console.log("-----------2")
                 compacted["@id"] = "fhir:"+schema.className+"#"+Array(jsonIn)[0]["_id"];
                 compacted["@type"] = ["fhir:"+schema.className, "http://www.w3.org/2002/07/owl#Thing"];
               }
             }else{
               if ( schema.ref == undefined){
-                console.log("--------------////////////--------------schema.ref == undefined")
-                console.log("---------------------------------paramAcum : " + paramAcum)
+                console.log("-----------3")
+                //console.log("--------------////////////--------------schema.ref == undefined")
+                //console.log("---------------------------------paramAcum : " + paramAcum)
                 context[paramIn] = "fhir:"+schema.className+"."+paramIn;
                 compacted[paramIn] = Array(jsonIn)[0][paramIn];
               }else{
+                console.log("-----------4")
                 compacted["@id"] = "fhir:"+schema.className+"#"+Array(jsonIn)[0][paramIn];
                 compacted["@type"] = ["fhir:"+schema.className, "http://www.w3.org/2002/07/owl#Thing"];
               }
             }
             // To do: stuff
+        } else if (typeof jsonInObject[0] == "string"){
+          console.log("//////////////////////// 5")
+          context[paramIn] = "fhir:"+schema.className+"."+paramIn;
+          compacted[paramIn] = jsonInObject;
         }
         else if (type == "object") { // either array or object
           //console.log("****************************Object***************************");                    
-          compacted[paramIn] = {};          
+          compacted[paramIn] = {}; 
           Object.keys( jsonInObject ).forEach( function(param , index) {
 
             let compactedObject = {};
@@ -202,13 +214,17 @@ function addConcept(path){
             if ( schema.tree[param] != undefined ){
               console.log("schema.tree : " + paramIn);
               //console.log("schema.paths[paramIn] : " + JSON.stringify(schema.paths[param]))
-              paramSchema = schema.tree[param].schema;
-              
+              if (schema.tree[param].schema != undefined ){
+                console.log("(((((((((((((((((((( Entro !!!!!!!!!")
+                paramSchema = schema.tree[param].schema;
+              }else{
+                paramSchema = schema.tree[paramIn];
+              }
               jsonldparse(conceptName, paramSchema, compactedObject, context, param, param,jsonInObject);
             }
             else if ( schema.tree[paramAcum+"."+param] != undefined ){
-              console.log("schema.tree paramAcum: "+paramAcum+"."+param);
-              paramSchema = schema.tree[paramAcum+"."+param].schema
+             console.log("schema.tree paramAcum: "+paramAcum+"."+param);
+             // paramSchema = schema.tree[paramAcum+"."+param].schema
               /*console.log("Schema schema.paths paramAcum:");
               console.log(schema.paths[paramAcum+"."+param]);*/
               //
@@ -217,14 +233,14 @@ function addConcept(path){
               }
               jsonldparse(conceptName, paramSchema, compactedObject, context, param, paramAcum+"."+param,jsonInObject);
             }else{
-              console.log("Object.keys( jsonInObject ).forEach( function(param , index) { -> else")
+              console.log("schema.tree[param] == undefined and schema.tree[paramAcum+.+param] == undefined")
               //console.log("Schema -> "  + schema  );
-              console.log("paramIn -> "  + paramIn  );
+              /*console.log("paramIn -> "  + paramIn  );
               console.log("paramAcum -> "  + paramAcum  );
               console.log("param -> "  + param  );
-              console.log("jsonInObject -> "  + jsonInObject);
+              console.log("jsonInObject -> "  + jsonInObject);*/
 
-              jsonldparse(conceptName, schema, compactedObject, context, param, param,jsonInObject);
+              jsonldparse(conceptName, schema.tree[paramIn], compactedObject, context, param, param,jsonInObject);
             }            
             compacted[paramIn] = Object.assign(compacted[paramIn],compactedObject);
           });
@@ -232,6 +248,13 @@ function addConcept(path){
         }else{
           console.log("////////////Else/////////////////");
         }
+
+        //Elimina parametros vacios
+        if ((compacted[paramIn] != undefined) && (isEmpty(compacted[paramIn]))) {
+          delete compacted[paramIn];
+          delete context[paramIn];
+        }
+        
         return compacted;
       }
 
@@ -246,7 +269,8 @@ function addConcept(path){
       let conceptSchema = require('mongoose').model(conceptName).schema;
       //To do : why i can set tge className ?
       conceptSchema.className = conceptName;
-      //console.log(conceptSchema);
+      /*console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$44-conceptSchema");
+      console.log(conceptSchema);*/
       //console.log(jsonIn);
       Object.keys(jsonIn).forEach( function(param , index) {
         //console.log("+++++++++++++++++ Param : " + param)
@@ -263,8 +287,8 @@ function addConcept(path){
       compacted["@context"]= context;
       
 
-
-      //console.log(compacted);
+      console.log("++++++++++++++++++++++ Compacted");
+      console.log(compacted);
 
       jsonld.expand(compacted, function(err, expanded) {
         console.log(JSON.stringify(expanded));
