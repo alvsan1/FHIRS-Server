@@ -1,0 +1,1503 @@
+{
+  "obj": {
+    "resourceType": {
+      "required": true
+    },
+    "id": {
+      "required": true
+    },
+    "name": [
+      {
+        "obj": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          }
+        },
+        "paths": {
+          "use": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "use",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "text": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "text",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "family": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "family",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "given": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "given",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "given",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "prefix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "prefix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "prefix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "suffix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "suffix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "suffix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "period.start": {
+            "path": "period.start",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "period.end": {
+            "path": "period.end",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "_id": {
+            "path": "_id",
+            "instance": "ObjectID",
+            "validators": [],
+            "setters": [
+              null
+            ],
+            "getters": [],
+            "options": {
+              "auto": true
+            },
+            "_index": null
+          }
+        },
+        "aliases": {},
+        "subpaths": {},
+        "virtuals": {
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "singleNestedPaths": {},
+        "nested": {
+          "period": true
+        },
+        "inherits": {},
+        "callQueue": [],
+        "_indexes": [],
+        "methods": {},
+        "methodOptions": {},
+        "statics": {},
+        "tree": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          },
+          "_id": {
+            "auto": true
+          },
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "query": {},
+        "childSchemas": [],
+        "plugins": [
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          }
+        ],
+        "s": {
+          "hooks": {
+            "_pres": {},
+            "_posts": {}
+          }
+        },
+        "_userProvidedOptions": {},
+        "options": {
+          "typeKey": "type",
+          "id": true,
+          "noVirtualId": false,
+          "_id": true,
+          "noId": false,
+          "validateBeforeSave": true,
+          "read": null,
+          "shardKey": null,
+          "autoIndex": null,
+          "minimize": true,
+          "discriminatorKey": "__t",
+          "versionKey": "__v",
+          "capped": false,
+          "bufferCommands": true,
+          "strict": true
+        },
+        "$globalPluginsApplied": true
+      }
+    ]
+  },
+  "paths": {
+    "resourceType": {
+      "enumValues": [],
+      "regExp": null,
+      "path": "resourceType",
+      "instance": "String",
+      "validators": [
+        {
+          "message": "Path `{PATH}` is required.",
+          "type": "required"
+        }
+      ],
+      "setters": [],
+      "getters": [],
+      "options": {
+        "required": true
+      },
+      "_index": null,
+      "isRequired": true,
+      "originalRequiredValue": true
+    },
+    "id": {
+      "enumValues": [],
+      "regExp": null,
+      "path": "id",
+      "instance": "String",
+      "validators": [
+        {
+          "message": "Path `{PATH}` is required.",
+          "type": "required"
+        }
+      ],
+      "setters": [],
+      "getters": [],
+      "options": {
+        "required": true
+      },
+      "_index": null,
+      "isRequired": true,
+      "originalRequiredValue": true
+    },
+    "name": {
+      "$isMongooseArray": true,
+      "path": "name",
+      "instance": "Array",
+      "validators": [],
+      "setters": [],
+      "getters": [],
+      "options": {
+        "type": [
+          {
+            "obj": {
+              "use": {},
+              "text": {},
+              "family": {},
+              "given": [
+                {}
+              ],
+              "prefix": [
+                {}
+              ],
+              "suffix": [
+                {}
+              ],
+              "period": {
+                "start": {},
+                "end": {}
+              }
+            },
+            "paths": {
+              "use": {
+                "enumValues": [],
+                "regExp": null,
+                "path": "use",
+                "instance": "String",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {},
+                "_index": null
+              },
+              "text": {
+                "enumValues": [],
+                "regExp": null,
+                "path": "text",
+                "instance": "String",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {},
+                "_index": null
+              },
+              "family": {
+                "enumValues": [],
+                "regExp": null,
+                "path": "family",
+                "instance": "String",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {},
+                "_index": null
+              },
+              "given": {
+                "caster": {
+                  "enumValues": [],
+                  "regExp": null,
+                  "path": "given",
+                  "instance": "String",
+                  "validators": [],
+                  "setters": [],
+                  "getters": [],
+                  "options": {},
+                  "_index": null
+                },
+                "$isMongooseArray": true,
+                "path": "given",
+                "instance": "Array",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {
+                  "type": [
+                    {}
+                  ]
+                },
+                "_index": null
+              },
+              "prefix": {
+                "caster": {
+                  "enumValues": [],
+                  "regExp": null,
+                  "path": "prefix",
+                  "instance": "String",
+                  "validators": [],
+                  "setters": [],
+                  "getters": [],
+                  "options": {},
+                  "_index": null
+                },
+                "$isMongooseArray": true,
+                "path": "prefix",
+                "instance": "Array",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {
+                  "type": [
+                    {}
+                  ]
+                },
+                "_index": null
+              },
+              "suffix": {
+                "caster": {
+                  "enumValues": [],
+                  "regExp": null,
+                  "path": "suffix",
+                  "instance": "String",
+                  "validators": [],
+                  "setters": [],
+                  "getters": [],
+                  "options": {},
+                  "_index": null
+                },
+                "$isMongooseArray": true,
+                "path": "suffix",
+                "instance": "Array",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {
+                  "type": [
+                    {}
+                  ]
+                },
+                "_index": null
+              },
+              "period.start": {
+                "path": "period.start",
+                "instance": "Date",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {},
+                "_index": null
+              },
+              "period.end": {
+                "path": "period.end",
+                "instance": "Date",
+                "validators": [],
+                "setters": [],
+                "getters": [],
+                "options": {},
+                "_index": null
+              },
+              "_id": {
+                "path": "_id",
+                "instance": "ObjectID",
+                "validators": [],
+                "setters": [
+                  null
+                ],
+                "getters": [],
+                "options": {
+                  "auto": true
+                },
+                "_index": null
+              }
+            },
+            "aliases": {},
+            "subpaths": {},
+            "virtuals": {
+              "id": {
+                "path": "id",
+                "getters": [
+                  null
+                ],
+                "setters": [],
+                "options": {}
+              }
+            },
+            "singleNestedPaths": {},
+            "nested": {
+              "period": true
+            },
+            "inherits": {},
+            "callQueue": [],
+            "_indexes": [],
+            "methods": {},
+            "methodOptions": {},
+            "statics": {},
+            "tree": {
+              "use": {},
+              "text": {},
+              "family": {},
+              "given": [
+                {}
+              ],
+              "prefix": [
+                {}
+              ],
+              "suffix": [
+                {}
+              ],
+              "period": {
+                "start": {},
+                "end": {}
+              },
+              "_id": {
+                "auto": true
+              },
+              "id": {
+                "path": "id",
+                "getters": [
+                  null
+                ],
+                "setters": [],
+                "options": {}
+              }
+            },
+            "query": {},
+            "childSchemas": [],
+            "plugins": [
+              {
+                "opts": {
+                  "deduplicate": true
+                }
+              },
+              {
+                "opts": {
+                  "deduplicate": true
+                }
+              },
+              {
+                "opts": {
+                  "deduplicate": true
+                }
+              },
+              {
+                "opts": {
+                  "deduplicate": true
+                }
+              },
+              {
+                "opts": {
+                  "deduplicate": true
+                }
+              }
+            ],
+            "s": {
+              "hooks": {
+                "_pres": {},
+                "_posts": {}
+              }
+            },
+            "_userProvidedOptions": {},
+            "options": {
+              "typeKey": "type",
+              "id": true,
+              "noVirtualId": false,
+              "_id": true,
+              "noId": false,
+              "validateBeforeSave": true,
+              "read": null,
+              "shardKey": null,
+              "autoIndex": null,
+              "minimize": true,
+              "discriminatorKey": "__t",
+              "versionKey": "__v",
+              "capped": false,
+              "bufferCommands": true,
+              "strict": true
+            },
+            "$globalPluginsApplied": true
+          }
+        ]
+      },
+      "_index": null,
+      "schema": {
+        "obj": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          }
+        },
+        "paths": {
+          "use": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "use",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "text": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "text",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "family": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "family",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "given": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "given",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "given",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "prefix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "prefix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "prefix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "suffix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "suffix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "suffix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "period.start": {
+            "path": "period.start",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "period.end": {
+            "path": "period.end",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "_id": {
+            "path": "_id",
+            "instance": "ObjectID",
+            "validators": [],
+            "setters": [
+              null
+            ],
+            "getters": [],
+            "options": {
+              "auto": true
+            },
+            "_index": null
+          }
+        },
+        "aliases": {},
+        "subpaths": {},
+        "virtuals": {
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "singleNestedPaths": {},
+        "nested": {
+          "period": true
+        },
+        "inherits": {},
+        "callQueue": [],
+        "_indexes": [],
+        "methods": {},
+        "methodOptions": {},
+        "statics": {},
+        "tree": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          },
+          "_id": {
+            "auto": true
+          },
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "query": {},
+        "childSchemas": [],
+        "plugins": [
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          }
+        ],
+        "s": {
+          "hooks": {
+            "_pres": {},
+            "_posts": {}
+          }
+        },
+        "_userProvidedOptions": {},
+        "options": {
+          "typeKey": "type",
+          "id": true,
+          "noVirtualId": false,
+          "_id": true,
+          "noId": false,
+          "validateBeforeSave": true,
+          "read": null,
+          "shardKey": null,
+          "autoIndex": null,
+          "minimize": true,
+          "discriminatorKey": "__t",
+          "versionKey": "__v",
+          "capped": false,
+          "bufferCommands": true,
+          "strict": true
+        },
+        "$globalPluginsApplied": true
+      },
+      "schemaOptions": {},
+      "$isMongooseDocumentArray": true
+    },
+    "_id": {
+      "path": "_id",
+      "instance": "ObjectID",
+      "validators": [],
+      "setters": [
+        null
+      ],
+      "getters": [],
+      "options": {
+        "auto": true
+      },
+      "_index": null
+    },
+    "__v": {
+      "path": "__v",
+      "instance": "Number",
+      "validators": [],
+      "setters": [],
+      "getters": [],
+      "options": {},
+      "_index": null
+    }
+  },
+  "aliases": {},
+  "subpaths": {},
+  "virtuals": {},
+  "singleNestedPaths": {},
+  "nested": {},
+  "inherits": {},
+  "callQueue": [],
+  "_indexes": [],
+  "methods": {},
+  "methodOptions": {},
+  "statics": {},
+  "tree": {
+    "resourceType": {
+      "required": true
+    },
+    "id": {
+      "required": true
+    },
+    "name": [
+      {
+        "obj": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          }
+        },
+        "paths": {
+          "use": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "use",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "text": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "text",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "family": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "family",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "given": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "given",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "given",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "prefix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "prefix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "prefix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "suffix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "suffix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "suffix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "period.start": {
+            "path": "period.start",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "period.end": {
+            "path": "period.end",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "_id": {
+            "path": "_id",
+            "instance": "ObjectID",
+            "validators": [],
+            "setters": [
+              null
+            ],
+            "getters": [],
+            "options": {
+              "auto": true
+            },
+            "_index": null
+          }
+        },
+        "aliases": {},
+        "subpaths": {},
+        "virtuals": {
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "singleNestedPaths": {},
+        "nested": {
+          "period": true
+        },
+        "inherits": {},
+        "callQueue": [],
+        "_indexes": [],
+        "methods": {},
+        "methodOptions": {},
+        "statics": {},
+        "tree": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          },
+          "_id": {
+            "auto": true
+          },
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "query": {},
+        "childSchemas": [],
+        "plugins": [
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          }
+        ],
+        "s": {
+          "hooks": {
+            "_pres": {},
+            "_posts": {}
+          }
+        },
+        "_userProvidedOptions": {},
+        "options": {
+          "typeKey": "type",
+          "id": true,
+          "noVirtualId": false,
+          "_id": true,
+          "noId": false,
+          "validateBeforeSave": true,
+          "read": null,
+          "shardKey": null,
+          "autoIndex": null,
+          "minimize": true,
+          "discriminatorKey": "__t",
+          "versionKey": "__v",
+          "capped": false,
+          "bufferCommands": true,
+          "strict": true
+        },
+        "$globalPluginsApplied": true
+      }
+    ],
+    "_id": {
+      "auto": true
+    }
+  },
+  "query": {},
+  "childSchemas": [
+    {
+      "schema": {
+        "obj": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          }
+        },
+        "paths": {
+          "use": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "use",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "text": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "text",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "family": {
+            "enumValues": [],
+            "regExp": null,
+            "path": "family",
+            "instance": "String",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "given": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "given",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "given",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "prefix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "prefix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "prefix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "suffix": {
+            "caster": {
+              "enumValues": [],
+              "regExp": null,
+              "path": "suffix",
+              "instance": "String",
+              "validators": [],
+              "setters": [],
+              "getters": [],
+              "options": {},
+              "_index": null
+            },
+            "$isMongooseArray": true,
+            "path": "suffix",
+            "instance": "Array",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {
+              "type": [
+                {}
+              ]
+            },
+            "_index": null
+          },
+          "period.start": {
+            "path": "period.start",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "period.end": {
+            "path": "period.end",
+            "instance": "Date",
+            "validators": [],
+            "setters": [],
+            "getters": [],
+            "options": {},
+            "_index": null
+          },
+          "_id": {
+            "path": "_id",
+            "instance": "ObjectID",
+            "validators": [],
+            "setters": [
+              null
+            ],
+            "getters": [],
+            "options": {
+              "auto": true
+            },
+            "_index": null
+          }
+        },
+        "aliases": {},
+        "subpaths": {},
+        "virtuals": {
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "singleNestedPaths": {},
+        "nested": {
+          "period": true
+        },
+        "inherits": {},
+        "callQueue": [],
+        "_indexes": [],
+        "methods": {},
+        "methodOptions": {},
+        "statics": {},
+        "tree": {
+          "use": {},
+          "text": {},
+          "family": {},
+          "given": [
+            {}
+          ],
+          "prefix": [
+            {}
+          ],
+          "suffix": [
+            {}
+          ],
+          "period": {
+            "start": {},
+            "end": {}
+          },
+          "_id": {
+            "auto": true
+          },
+          "id": {
+            "path": "id",
+            "getters": [
+              null
+            ],
+            "setters": [],
+            "options": {}
+          }
+        },
+        "query": {},
+        "childSchemas": [],
+        "plugins": [
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          },
+          {
+            "opts": {
+              "deduplicate": true
+            }
+          }
+        ],
+        "s": {
+          "hooks": {
+            "_pres": {},
+            "_posts": {}
+          }
+        },
+        "_userProvidedOptions": {},
+        "options": {
+          "typeKey": "type",
+          "id": true,
+          "noVirtualId": false,
+          "_id": true,
+          "noId": false,
+          "validateBeforeSave": true,
+          "read": null,
+          "shardKey": null,
+          "autoIndex": null,
+          "minimize": true,
+          "discriminatorKey": "__t",
+          "versionKey": "__v",
+          "capped": false,
+          "bufferCommands": true,
+          "strict": true
+        },
+        "$globalPluginsApplied": true
+      }
+    }
+  ],
+  "plugins": [
+    {
+      "opts": {
+        "deduplicate": true
+      }
+    },
+    {
+      "opts": {
+        "deduplicate": true
+      }
+    },
+    {
+      "opts": {
+        "deduplicate": true
+      }
+    },
+    {
+      "opts": {
+        "deduplicate": true
+      }
+    },
+    {
+      "opts": {
+        "deduplicate": true
+      }
+    }
+  ],
+  "s": {
+    "hooks": {
+      "_pres": {},
+      "_posts": {}
+    }
+  },
+  "_userProvidedOptions": {},
+  "options": {
+    "typeKey": "type",
+    "id": true,
+    "noVirtualId": false,
+    "_id": true,
+    "noId": false,
+    "validateBeforeSave": true,
+    "read": null,
+    "shardKey": null,
+    "autoIndex": null,
+    "minimize": true,
+    "discriminatorKey": "__t",
+    "versionKey": "__v",
+    "capped": false,
+    "bufferCommands": true,
+    "strict": true,
+    "pluralization": true
+  },
+  "$globalPluginsApplied": true
+}

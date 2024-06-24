@@ -171,6 +171,7 @@ function addConcept(path){
         let jsonInObject = JSON.parse(JSON.stringify(jsonIn))[paramIn];
         var type = typeof jsonInObject;
         console.log("-----------------Type-----------:" + type)
+        let isArray = false;
         if (type == "number") {
             // To do: stuff
         }
@@ -206,21 +207,29 @@ function addConcept(path){
         else if (type == "object") { // either array or object
           //console.log("****************************Object***************************");                    
           compacted[paramIn] = {}; 
+          console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%jsonInObject  :  "+JSON.stringify(jsonInObject));
           Object.keys( jsonInObject ).forEach( function(param , index) {
-
+            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Object.keys");
             let compactedObject = {};
             let paramSchema;
 
             if ( schema.tree[param] != undefined ){
               console.log("schema.tree : " + paramIn);
+              console.log("schema.tree param : " + param);
               //console.log("schema.paths[paramIn] : " + JSON.stringify(schema.paths[param]))
               if (schema.tree[param].schema != undefined ){
-                console.log("(((((((((((((((((((( Entro !!!!!!!!!")
-                paramSchema = schema.tree[param].schema;
+                console.log("(((((((((((((((((((( 6")
+                jsonldparse(conceptName, schema.tree[param].schema, compactedObject, context, param, param,jsonInObject);
+              }else if (/\d+/.test( paramIn ) ){
+                console.log("(((((((((((((((((((( 7")
+                //console.log("######################## schema : " + JSON.stringify(schema))
+                jsonldparse(schema.className, schema, compactedObject, context, param, paramAcum,jsonInObject);  
+                console.log("***************************  compactedObject : " + JSON.stringify(compactedObject))        
+                isArray = true;
               }else{
-                paramSchema = schema.tree[paramIn];
+                jsonldparse(conceptName, schema.tree[paramIn], compactedObject, context, param, param,jsonInObject);
               }
-              jsonldparse(conceptName, paramSchema, compactedObject, context, param, param,jsonInObject);
+              
             }
             else if ( schema.tree[paramAcum+"."+param] != undefined ){
              console.log("schema.tree paramAcum: "+paramAcum+"."+param);
@@ -233,18 +242,33 @@ function addConcept(path){
               }
               jsonldparse(conceptName, paramSchema, compactedObject, context, param, paramAcum+"."+param,jsonInObject);
             }else{
-              console.log("schema.tree[param] == undefined and schema.tree[paramAcum+.+param] == undefined")
-              //console.log("Schema -> "  + schema  );
+              console.log("schema.tree[param] == undefined and schema.tree[paramAcum+.+param] == undefined");
+              let schemaNameIn = schema.tree[paramIn][0].match(/\[(.*?)\]/)[1];
+              schemaIn = require('mongoose').model(schemaNameIn).schema;
+              schemaIn["className"] = schemaNameIn;
+              //console.log("''''''''''''''''''''''''''' SchemaIn" + JSON.stringify(schemaIn));
+              //console.log("++++++++++++++++++++++++++ schemaIn : " require('mongoose').model(schema.tree[paramIn][0]).schema)
+              //console.log("Schema -> "  + JSON.stringify(schema)  );
               /*console.log("paramIn -> "  + paramIn  );
               console.log("paramAcum -> "  + paramAcum  );
               console.log("param -> "  + param  );
               console.log("jsonInObject -> "  + jsonInObject);*/
 
-              jsonldparse(conceptName, schema.tree[paramIn], compactedObject, context, param, param,jsonInObject);
-            }            
-            compacted[paramIn] = Object.assign(compacted[paramIn],compactedObject);
+
+              jsonldparse(conceptName, schemaIn, compactedObject, context, param, paramIn,jsonInObject);
+            }
+            console.log("?????????????????????????  compacted[paramIn] : " + JSON.stringify(compacted[paramIn]));  
+            if (/\d+/.test( paramIn)){
+              compacted = Object.assign(compacted,compactedObject);
+            }else{
+              compacted[paramIn] = Object.assign(compacted[paramIn],compactedObject);
+            }
+            console.log("?????????????????????????  compactedObject : " + JSON.stringify(compactedObject));
+            console.log("?????????????????????????  compacted[paramIn] : " + JSON.stringify(compacted[paramIn]));
           });
-          context[paramIn] = "fhir:"+schema.className+"."+paramIn;  
+          if (!/\d+/.test( paramIn)){
+            context[paramIn] = "fhir:"+schema.className+"."+paramIn;  
+          }
         }else{
           console.log("////////////Else/////////////////");
         }
@@ -612,7 +636,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
     //Definition the objects of definitions by the schemas
     let jsonObj = {}; //Object by mongodb.
     
-    let valParameter = null;
+    let valParameter;
     let schemaParameter = null;
     
 
@@ -1017,15 +1041,20 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
           //Set the class name.
             
           if ( multiplicityParameter == ", ..."){
-            valParameter["className"] = [parameterType];
-            schemaParameter = {type: "array",
+            //console.log("• Is Multiple DataType Valid.");
+            //console.log("-------------------------- parameterType :" + parameterType)
+            jsonObj[parameter] = ['['+parameterType+']'];
+            //console.log("-------------------------- valParameter :" + valParameter)
+            schemaParameter = {type: 'array',
+                               ref: parameterType
+                              }
+            /*{type: "array",
                                items: {$ref: "#/definitions/"+parameterType, title: parameter}
-                              };
+                              };*/
           }else{
-            valParameter["className"] = parameterType;
+            jsonObj= {parameter :[parameterType]};
             schemaParameter = {$ref: "#/definitions/"+parameterType, title: parameter};
           }            
-          jsonObj[parameter] = valParameter; 
           //Add reference at schema UI          
           schemaJsonPointer[parameter] = schemaParameter;
 
@@ -1065,8 +1094,8 @@ addModels(pathDefinitions);
 
 app.get('/', function (req, res, next) {
   console.log("------------------------------")
-  let schema = require('mongoose').model('Patient').schema;
-  console.log(schema)
+  let schema = require('mongoose').model('HumanName').schema;
+  //console.log(schema)
 
   var jsonSchemaGenerator = require('json-schema-generator'),
     obj = { some: { object: true } },
