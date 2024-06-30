@@ -1139,7 +1139,7 @@ addModels(pathDefinitions);
 
 app.get('/', function (req, res, next) {
   console.log("------------------------------")
-  let schema = require('mongoose').model('HumanName').schema;
+  let schema = require('mongoose').model('CodeableConcept').schema;
   //console.log(schema)
 
   var jsonSchemaGenerator = require('json-schema-generator'),
