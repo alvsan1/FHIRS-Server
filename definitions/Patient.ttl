@@ -6,7 +6,7 @@
   # from Resource: .id, .meta, .implicitRules, and .language
   # from DomainResource: .text, .contained, .extension, and .modifierExtension
   fhir:Patient.identifier [ Identifier ], ... ; # 0..* An identifier for this patient
-  fhir:Patient.active [ boolean ], ... ; # 0..1 Whether this patient's record is in active use
+  fhir:Patient.active [ boolean ]; # 0..1 Whether this patient's record is in active use
   fhir:Patient.name [ HumanName ], ... ; # 0..* A name associated with the patient
   fhir:Patient.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the individual
   fhir:Patient.gender [ code ]; # 0..1 male | female | other | unknown

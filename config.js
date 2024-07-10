@@ -9,5 +9,5 @@ module.exports = {
   server: {
     port: 4000
   },
-  sparqlUpdate: "http://192.168.1.134:3030/fhir/?graph=http://hl7.org/fhir/"
+  sparqlUpdate: 'http://192.168.1.134:3030/fhir/?graph=http://hl7.org/fhir/'
 };

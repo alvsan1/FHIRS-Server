@@ -40,11 +40,12 @@ const HumanNameSchema = new Schema({
   }
 });
 
+const HumanName = mongoose.model('Patient', HumanNameSchema);
 
 const PatientSchema = new Schema({
   resourceType: { type: String, required: true },
   id: { type: String, required: true },
-  name: [HumanNameSchema], // Aquí definimos name como un array de HumanName
+  name: [HumanName], // Aquí definimos name como un array de HumanName
   // otros campos del recurso Patient
 });
 
@@ -53,5 +54,5 @@ const Patient = mongoose.model('Patient', PatientSchema);
 
 let schema = require('mongoose').model('Patient').schema;
 
-//console.log(JSON.stringify(schema, null, 2));
+console.log(JSON.stringify(schema, null, 2));
 

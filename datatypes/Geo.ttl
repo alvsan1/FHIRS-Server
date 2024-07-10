@@ -1,0 +1,6 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+   fhir:Geo.url [ uri ]; # 0..1 Logical URI to reference this activity definition (globally unique)
+   fhir:Geo.extension [ GeoUbication ], ... ; # 0..* Street Geo ubication.
+]

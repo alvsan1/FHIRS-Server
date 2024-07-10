@@ -1,0 +1,7 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:GeoUbication.url [ code ]; # 0..1 latitude | longitude
+  fhir:GeoUbication.valueDecimal [ decimal ]; # 0..1 Numerical value (with implicit precision)
+]
