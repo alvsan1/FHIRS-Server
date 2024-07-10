@@ -98,7 +98,10 @@ function jsonldparse(conceptName, schema ,compacted, context, paramIn, paramAcum
             }else{
               //The Object is a Array
               console.log("The Object is a Array.");
-              let schemaNameIn = schema.tree[paramIn][0].match(/\[(.*?)\]/)[1];
+              console.log("paramIn -> "  + paramIn  );
+              console.log("schema.tree[paramIn][0] -> "  + schema.tree[paramIn][0]  );
+              const regex = /^\[?(.*?)\]?$/;
+              let schemaNameIn = schema.tree[paramIn][0].match(regex)[1];//match(/\[(.*?)\]/)[1];
               schemaIn = require('mongoose').model(schemaNameIn).schema;
               schemaIn["className"] = schemaNameIn;
               //console.log("''''''''''''''''''''''''''' SchemaIn" + JSON.stringify(schemaIn));
@@ -593,14 +596,13 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         if ( valParameter == null ){
           valParameter = String;
         } else {
-          //console.log("• Is DataType Valid.");
-          //console.log(parameterType);
-
-          //console.log("////////** ira aca ??? ***  "+parameterType +"//////////");
+          console.log("• Is DataType Valid.");
+          console.log("***************** parameterType : "+parameterType +"//////////");
+          console.log("***************** multiplicityParameter : "+multiplicityParameter +"//////////");
           //Set the class name.
             
           if ( multiplicityParameter == ", ..."){
-            //console.log("• Is Multiple DataType Valid.");
+            console.log("• Is Multiple DataType Valid.");
             //console.log("-------------------------- parameterType :" + parameterType)
             jsonObj[parameter] = ['['+parameterType+']'];
             //console.log("-------------------------- valParameter :" + valParameter)
@@ -611,9 +613,12 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
                                items: {$ref: "#/definitions/"+parameterType, title: parameter}
                               };*/
           }else{
-            jsonObj= {parameter :[parameterType]};
-            schemaParameter = {$ref: "#/definitions/"+parameterType, title: parameter};
-          }            
+          	console.log("• Is Simple DataType Valid.");
+            jsonObj[parameter]= [parameterType];
+            schemaParameter = {$ref: "#/definitions/"+parameterType, title: parameter};            
+          }  
+          console.log("--------------------------" + conceptName);
+          console.log("--------------------------" + JSON.stringify(jsonObj));   
           //Add reference at schema UI          
           schemaJsonPointer[parameter] = schemaParameter;
 

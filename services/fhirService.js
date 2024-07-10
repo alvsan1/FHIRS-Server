@@ -77,6 +77,7 @@ function addConcept(path, router){
       console.log(JSON.stringify(compacted));
 
       jsonld.expand(compacted, function(err, expanded) {
+      	console.log("++++++++++++++++++++++ Expanded");
         console.log(JSON.stringify(expanded));
         fetch(config.sparqlUpdate, {
           method: 'post',

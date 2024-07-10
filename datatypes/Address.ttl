@@ -12,4 +12,5 @@
   fhir:Address.postalCode [ string ]; # 0..1 Postal code for area
   fhir:Address.country [ string ]; # 0..1 Country (e.g. can be ISO 3166 2 or 3 letter code)
   fhir:Address.period [ Period ]; # 0..1 Time period when address was/is in use
+  fhir:Address.extension [ Geo ]; # 0..1 Street Geo ubication.
 ]
