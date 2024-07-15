@@ -405,7 +405,26 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
         jsonObj[parameter] = valParameter;
         schemaJsonPointer[parameter] = schemaParameter;
 
-        break;        
+        break; 
+      case /time/.test(parameterType):
+        //console.log("• Matched code string");
+        //console.log(parameter)
+        //console.log(multiplicityParameter == ", ...")
+        if ( multiplicityParameter == ", ..."){
+          valParameter = {type: ['[String]']};
+          schemaParameter = {type: "array",
+                             items: {type: "string"
+                           }};
+        }else{
+          valParameter = {type: String};
+          schemaParameter = {type: "string"};
+        }
+        jsonObj[parameter] = valParameter;
+        //console.log("--------------------------parameter :" + parameter);
+        //console.log(jsonObj);
+
+        schemaJsonPointer[parameter] = schemaParameter;
+        break;       
       case /uri/.test(parameterType):
         //console.log("• Matched uri DataType");
        if ( multiplicityParameter == ", ..."){
@@ -438,22 +457,22 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
 
         break;
       case /Reference.*/.test(parameterType):
-        //console.log("• Matched Reference");
+        console.log("• Matched Reference");
+        console.log("+++++++++++++ parameterType : " + parameterType)
         let objectReference = parameterType.match(new RegExp("Reference.(.*)."))[1];
         //console.log(objectReference);
         refs = objectReference.match(new RegExp("([A-Za-z]*\\|[A-Za-z]*)"));
+        parameterType = "Reference";
         //console.log("*****************Refs*******************");
         //console.log(refs);
 
         //Si tiene mas de una referencia
         if (refs == null ){
           let autocomplete = {};
-
+          console.log("• Matched Reference - (refs == null )");
           if ( multiplicityParameter == ", ..."){
-            valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
-            valParameter["className"] = objectReference;
-            jsonObj[parameter] = valParameter; 
-
+            
+            jsonObj[parameter] = ['['+parameterType+']'];
 
             //Create the Schema client
             schemaParameter = {type: "string"};
@@ -480,9 +499,7 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
             schemaJson["references"].push({"title": " fhir:" + conceptName + "."+ resultParam[1], "concept":["fhir:"+objectReference]});
 
           }else{
-            valParameter = { type: Schema.Types.ObjectId, ref: objectReference }
-            valParameter["className"] = objectReference;
-            jsonObj[parameter] = valParameter;
+            jsonObj[parameter]= [parameterType];
 
             //Create the Schema client
             schemaParameter = { type: "string"};
@@ -513,23 +530,30 @@ function fhirsConceptTurtleToSchemaLine(conceptName,schema, line){
 
 
         }else{ //Contains multiple references 
-            
+          console.log("Contains multiple references")
+          console.log("$$$$$$$$$$$$$$$$$$$$$$ parameterType : " + parameterType)
+          valParameter = require('mongoose').model(parameterType).schema
+          let listRefs = objectReference.split("|")
+
+          if ( valParameter == null ){
+            valParameter = String;
+          } else {
+              
         //  valParameter = [{ type: Schema.Types.Mixed, refsList: refsList }]
         //  jsonObj[parameter] = [valParameter];
 
           //Create the schema server
           //valParameter = [{ type: Schema.Types.ObjectId, ref: objectReference }]
-
-          let listRefs = objectReference.split("|")
-
-          valParameter = { type: Schema.Types.ObjectId, refPath: 'dynamicModelType'+parameter};
-          //Set the class name is "dynamicModelType".
-          valParameter["className"] = "dynamicModelType";
-          jsonObj[parameter] = valParameter; 
-
-          let dmType = { type: String, enum:  listRefs };
-          jsonObj["dynamicModelType"+parameter] = dmType;
-
+            if ( multiplicityParameter == ", ..."){
+              console.log("• Is Multiple Concept.");
+              //console.log("-------------------------- parameterType :" + parameterType)
+              jsonObj[parameter] = ['['+parameterType+']'];
+            }else{
+              console.log("• Is Simple Concept.");
+              jsonObj[parameter]= [parameterType];          
+            }
+          }
+          
           //Create the Schema client
           schemaDynamicParameter = {type: "string", "title": "Type of "+ parameter,enum: listRefs};
           schemaJsonPointer["dynamicModelType"+parameter] = schemaDynamicParameter;

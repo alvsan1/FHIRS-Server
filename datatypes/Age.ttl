@@ -1,0 +1,10 @@
+@prefix fhir: <http://hl7.org/fhir/> 
+
+[
+ # from Element: Element.extension
+  fhir:Age.value [ decimal ]; # 0..1 Numerical value (with implicit precision)
+  fhir:Age.comparator [ code ]; # 0..1 < | <= | >= | > - how to understand the value
+  fhir:Age.unit [ string ]; # 0..1 Unit representation
+  fhir:Age.system [ uri ]; # 0..1 System that defines coded unit form
+  fhir:Age.code [ code ]; # 0..1 Coded form of the unit
+]

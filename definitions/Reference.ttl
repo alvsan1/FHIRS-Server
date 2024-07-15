@@ -1,0 +1,9 @@
+@prefix fhir: <http://hl7.org/fhir/> .
+
+[
+ # from Element: Element.extension
+  fhir:Reference.reference [ string ]; # 0..1 Literal reference, Relative, internal or absolute URL
+  fhir:Reference.type [ uri ]; # 0..1 Type the reference refers to (e.g. "Patient")
+  fhir:Reference.identifier [ Identifier ]; # 0..1 Logical reference, when literal reference is not known
+  fhir:Reference.display [ string ]; # 0..1 Text alternative for the resource
+]

@@ -1,0 +1,7 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[
+ # from Element: Element.extension
+  fhir:Range.low [ SimpleQuantity ]; # 0..1 Low limit
+  fhir:Range.high [ SimpleQuantity ]; # 0..1 High limit
+]

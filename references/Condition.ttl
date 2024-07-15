@@ -1,0 +1,73 @@
+@prefix fhir:  <http://hl7.org/fhir/> . 
+@prefix owl:   <http://www.w3.org/2002/07/owl#> . 
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix dt:    <http://hl7.org/orim/datatype/> . 
+@prefix cs:    <http://hl7.org/orim/codesystem/> . 
+@prefix fhir-vs: <http://hl7.org/fhir/ValueSet/> . 
+@prefix ex:    <http://hl7.org/fhir/StructureDefinition/> . 
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . 
+@prefix rim:   <http://hl7.org/owl/rim/> . 
+@prefix dcterms: <http://purl.org/dc/terms/> . 
+@prefix vs:    <http://hl7.org/orim/valueset/> . 
+@prefix loinc: <http://loinc.org/rdf#> . 
+@prefix w5:    <http://hl7.org/fhir/w5#> . 
+@prefix dc:    <http://purl.org/dc/elements/1.1/> . 
+
+ fhir:Condition.subject.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Condition.subject  fhir:Reference.type ) .
+
+ fhir:Condition.subject rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Condition.subject.type  ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:Group ] . 
+
+ fhir:Condition.encounter.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Condition.encounter  fhir:Reference.type ) .
+
+ fhir:Condition.encounter rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Condition.encounter.type  ;
+	owl:someValuesFrom fhir:Encounter ] . 
+
+ fhir:Condition.recorder.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Condition.recorder  fhir:Reference.type ) .
+
+ fhir:Condition.recorder rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Condition.recorder.type  ;
+	owl:someValuesFrom fhir:Practitioner ;
+	owl:someValuesFrom fhir:PractitionerRole ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:RelatedPerson ] . 
+
+ fhir:Condition.asserter.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Condition.asserter  fhir:Reference.type ) .
+
+ fhir:Condition.asserter rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Condition.asserter.type  ;
+	owl:someValuesFrom fhir:Practitioner ;
+	owl:someValuesFrom fhir:PractitionerRole ;
+	owl:someValuesFrom fhir:Patient ;
+	owl:someValuesFrom fhir:RelatedPerson ] . 
+
+ fhir:Condition.stage.assessment.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Condition.stage.assessment  fhir:Reference.type ) .
+
+ fhir:Condition.stage.assessment rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Condition.stage.assessment.type  ;
+	owl:someValuesFrom fhir:ClinicalImpression ;
+	owl:someValuesFrom fhir:DiagnosticReport ;
+	owl:someValuesFrom fhir:Observation ] . 
+
+ fhir:Condition.evidence.detail.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:Condition.evidence.detail  fhir:Reference.type ) .
+
+ fhir:Condition.evidence.detail rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:Condition.evidence.detail.type  ;
+	owl:someValuesFrom fhir:Any ] . 
+

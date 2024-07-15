@@ -1,0 +1,10 @@
+@prefix fhir: <http://hl7.org/fhir/> 
+
+[
+ # from Element: Element.extension
+  fhir:SimpleQuantity.value [ decimal ]; # 0..1 Numerical value (with implicit precision)
+  fhir:SimpleQuantity.comparator [ code ]; # 0..1 < | <= | >= | > - how to understand the value
+  fhir:SimpleQuantity.unit [ string ]; # 0..1 Unit representation
+  fhir:SimpleQuantity.system [ uri ]; # 0..1 System that defines coded unit form
+  fhir:SimpleQuantity.code [ code ]; # 0..1 Coded form of the unit
+]

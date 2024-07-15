@@ -1,0 +1,24 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:RelatedPerson;
+  fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:RelatedPerson.identifier [ Identifier ], ... ; # 0..* A human identifier for this person
+  fhir:RelatedPerson.active [ boolean ]; # 0..1 Whether this related person's record is in active use
+  fhir:RelatedPerson.patient [ Reference(Patient) ]; # 1..1 The patient this person is related to
+  fhir:RelatedPerson.relationship [ CodeableConcept ], ... ; # 0..* The nature of the relationship
+  fhir:RelatedPerson.name [ HumanName ], ... ; # 0..* A name associated with the person
+  fhir:RelatedPerson.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the person
+  fhir:RelatedPerson.gender [ code ]; # 0..1 male | female | other | unknown
+  fhir:RelatedPerson.birthDate [ date ]; # 0..1 The date on which the related person was born
+  fhir:RelatedPerson.address [ Address ], ... ; # 0..* Address where the related person can be contacted or visited
+  fhir:RelatedPerson.photo [ Attachment ], ... ; # 0..* Image of the person
+  fhir:RelatedPerson.period [ Period ]; # 0..1 Period of time that this relationship is considered valid
+  fhir:RelatedPerson.communication [ # 0..* A language which may be used to communicate with about the patient's health
+    fhir:RelatedPerson.communication.language [ CodeableConcept ]; # 1..1 The language which can be used to communicate with the patient about his or her health
+    fhir:RelatedPerson.communication.preferred [ boolean ]; # 0..1 Language preference indicator
+  ], ...;
+]

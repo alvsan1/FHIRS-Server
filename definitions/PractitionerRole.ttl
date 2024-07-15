@@ -1,0 +1,31 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:PractitionerRole;
+  fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:PractitionerRole.identifier [ Identifier ], ... ; # 0..* Business Identifiers that are specific to a role/location
+  fhir:PractitionerRole.active [ boolean ]; # 0..1 Whether this practitioner role record is in active use
+  fhir:PractitionerRole.period [ Period ]; # 0..1 The period during which the practitioner is authorized to perform in these role(s)
+  fhir:PractitionerRole.practitioner [ Reference(Practitioner) ]; # 0..1 Practitioner that is able to provide the defined services for the organization
+  fhir:PractitionerRole.organization [ Reference(Organization) ]; # 0..1 Organization where the roles are available
+  fhir:PractitionerRole.code [ CodeableConcept ], ... ; # 0..* Roles which this practitioner may perform
+  fhir:PractitionerRole.specialty [ CodeableConcept ], ... ; # 0..* Specific specialty of the practitioner
+  fhir:PractitionerRole.location [ Reference(Location) ], ... ; # 0..* The location(s) at which this practitioner provides care
+  fhir:PractitionerRole.healthcareService [ Reference(HealthcareService) ], ... ; # 0..* The list of healthcare services that this worker provides for this role's Organization/Location(s)
+  fhir:PractitionerRole.telecom [ ContactPoint ], ... ; # 0..* Contact details that are specific to the role/location/service
+  fhir:PractitionerRole.availableTime [ # 0..* Times the Service Site is available
+    fhir:PractitionerRole.availableTime.daysOfWeek [ code ], ... ; # 0..* mon | tue | wed | thu | fri | sat | sun
+    fhir:PractitionerRole.availableTime.allDay [ boolean ]; # 0..1 Always available? e.g. 24 hour service
+    fhir:PractitionerRole.availableTime.availableStartTime [ time ]; # 0..1 Opening time of day (ignored if allDay = true)
+    fhir:PractitionerRole.availableTime.availableEndTime [ time ]; # 0..1 Closing time of day (ignored if allDay = true)
+  ], ...;
+  fhir:PractitionerRole.notAvailable [ # 0..* Not available during this time due to provided reason
+    fhir:PractitionerRole.notAvailable.description [ string ]; # 1..1 Reason presented to the user explaining why time not available
+    fhir:PractitionerRole.notAvailable.during [ Period ]; # 0..1 Service not available from this date
+  ], ...;
+  fhir:PractitionerRole.availabilityExceptions [ string ]; # 0..1 Description of availability exceptions
+  fhir:PractitionerRole.endpoint [ Reference(Endpoint) ], ... ; # 0..* Technical endpoints providing access to services operated for the practitioner with this role
+]

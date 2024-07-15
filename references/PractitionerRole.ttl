@@ -1,0 +1,56 @@
+@prefix fhir:  <http://hl7.org/fhir/> . 
+@prefix owl:   <http://www.w3.org/2002/07/owl#> . 
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> . 
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix dt:    <http://hl7.org/orim/datatype/> . 
+@prefix cs:    <http://hl7.org/orim/codesystem/> . 
+@prefix fhir-vs: <http://hl7.org/fhir/ValueSet/> . 
+@prefix ex:    <http://hl7.org/fhir/StructureDefinition/> . 
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . 
+@prefix rim:   <http://hl7.org/owl/rim/> . 
+@prefix dcterms: <http://purl.org/dc/terms/> . 
+@prefix vs:    <http://hl7.org/orim/valueset/> . 
+@prefix loinc: <http://loinc.org/rdf#> . 
+@prefix w5:    <http://hl7.org/fhir/w5#> . 
+@prefix dc:    <http://purl.org/dc/elements/1.1/> . 
+
+ fhir:PractitionerRole.practitioner.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:PractitionerRole.practitioner  fhir:Reference.type ) .
+
+ fhir:PractitionerRole.practitioner rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:PractitionerRole.practitioner.type  ;
+	owl:someValuesFrom fhir:Practitioner ] . 
+
+ fhir:PractitionerRole.organization.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:PractitionerRole.organization  fhir:Reference.type ) .
+
+ fhir:PractitionerRole.organization rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:PractitionerRole.organization.type  ;
+	owl:someValuesFrom fhir:Organization ] . 
+
+ fhir:PractitionerRole.location.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:PractitionerRole.location  fhir:Reference.type ) .
+
+ fhir:PractitionerRole.location rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:PractitionerRole.location.type  ;
+	owl:someValuesFrom fhir:Location ] . 
+
+ fhir:PractitionerRole.healthcareService.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:PractitionerRole.healthcareService  fhir:Reference.type ) .
+
+ fhir:PractitionerRole.healthcareService rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:PractitionerRole.healthcareService.type  ;
+	owl:someValuesFrom fhir:HealthcareService ] . 
+
+ fhir:PractitionerRole.endpoint.type a owl:ObjectProperty ;
+	owl:propertyChainAxiom (  fhir:PractitionerRole.endpoint  fhir:Reference.type ) .
+
+ fhir:PractitionerRole.endpoint rdfs:subClassOf [ 
+	a owl:Restriction ;
+	owl:onProperty  fhir:PractitionerRole.endpoint.type  ;
+	owl:someValuesFrom fhir:Endpoint ] . 
+

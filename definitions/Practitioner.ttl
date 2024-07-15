@@ -1,0 +1,24 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+
+[ a fhir:Practitioner;
+  fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Practitioner.identifier [ Identifier ], ... ; # 0..* An identifier for the person as this agent
+  fhir:Practitioner.active [ boolean ]; # 0..1 Whether this practitioner's record is in active use
+  fhir:Practitioner.name [ HumanName ], ... ; # 0..* The name(s) associated with the practitioner
+  fhir:Practitioner.telecom [ ContactPoint ], ... ; # 0..* A contact detail for the practitioner (that apply to all roles)
+  fhir:Practitioner.address [ Address ], ... ; # 0..* Address(es) of the practitioner that are not role specific (typically home address)
+  fhir:Practitioner.gender [ code ]; # 0..1 male | female | other | unknown
+  fhir:Practitioner.birthDate [ date ]; # 0..1 The date  on which the practitioner was born
+  fhir:Practitioner.photo [ Attachment ], ... ; # 0..* Image of the person
+  fhir:Practitioner.qualification [ # 0..* Certification, licenses, or training pertaining to the provision of care
+    fhir:Practitioner.qualification.identifier [ Identifier ], ... ; # 0..* An identifier for this qualification for the practitioner
+    fhir:Practitioner.qualification.code [ CodeableConcept ]; # 1..1 Coded representation of the qualification
+    fhir:Practitioner.qualification.period [ Period ]; # 0..1 Period during which the qualification is valid
+    fhir:Practitioner.qualification.issuer [ Reference(Organization) ]; # 0..1 Organization that regulates and issues the qualification
+  ], ...;
+  fhir:Practitioner.communication [ CodeableConcept ], ... ; # 0..* A language the practitioner can use in patient communication
+]

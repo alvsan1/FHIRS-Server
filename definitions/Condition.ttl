@@ -1,0 +1,42 @@
+@prefix fhir: <http://hl7.org/fhir/>
+
+[ a fhir:Condition;
+  fhir:nodeRole fhir:treeRoot; # if this is the parser root
+
+  # from Resource: .id, .meta, .implicitRules, and .language
+  # from DomainResource: .text, .contained, .extension, and .modifierExtension
+  fhir:Condition.identifier [ Identifier ], ... ; # 0..* External Ids for this condition
+  fhir:Condition.clinicalStatus [ CodeableConcept ]; # 0..1 active | recurrence | relapse | inactive | remission | resolved
+  fhir:Condition.verificationStatus [ CodeableConcept ]; # 0..1 unconfirmed | provisional | differential | confirmed | refuted | entered-in-error
+  fhir:Condition.category [ CodeableConcept ], ... ; # 0..* problem-list-item | encounter-diagnosis
+  fhir:Condition.severity [ CodeableConcept ]; # 0..1 Subjective severity of condition
+  fhir:Condition.code [ CodeableConcept ]; # 0..1 Identification of the condition, problem or diagnosis
+  fhir:Condition.bodySite [ CodeableConcept ], ... ; # 0..* Anatomical location, if relevant
+  fhir:Condition.subject [ Reference(Patient|Group) ]; # 1..1 Who has the condition?
+  fhir:Condition.encounter [ Reference(Encounter) ]; # 0..1 Encounter created as part of
+  # Condition.onset[x] : 0..1 Estimated or actual date,  date-time, or age. One of these 5
+    fhir:Condition.onsetDateTime [ dateTime ]
+    fhir:Condition.onsetAge [ Age ]
+    fhir:Condition.onsetPeriod [ Period ]
+    fhir:Condition.onsetRange [ Range ]
+    fhir:Condition.onsetString [ string ]
+  # Condition.abatement[x] : 0..1 When in resolution/remission. One of these 5
+    fhir:Condition.abatementDateTime [ dateTime ]
+    fhir:Condition.abatementAge [ Age ]
+    fhir:Condition.abatementPeriod [ Period ]
+    fhir:Condition.abatementRange [ Range ]
+    fhir:Condition.abatementString [ string ]
+  fhir:Condition.recordedDate [ dateTime ]; # 0..1 Date record was first recorded
+  fhir:Condition.recorder [ Reference(Practitioner|PractitionerRole|Patient|RelatedPerson) ]; # 0..1 Who recorded the condition
+  fhir:Condition.asserter [ Reference(Practitioner|PractitionerRole|Patient|RelatedPerson) ]; # 0..1 Person who asserts this condition
+  fhir:Condition.stage [ # 0..* Stage/grade, usually assessed formally
+    fhir:Condition.stage.summary [ CodeableConcept ]; # 0..1 Simple summary (disease specific)
+    fhir:Condition.stage.assessment [ Reference(ClinicalImpression|DiagnosticReport|Observation) ], ... ; # 0..* Formal record of assessment
+    fhir:Condition.stage.type [ CodeableConcept ]; # 0..1 Kind of staging
+  ], ...;
+  fhir:Condition.evidence [ # 0..* Supporting evidence
+    fhir:Condition.evidence.code [ CodeableConcept ], ... ; # 0..* Manifestation/symptom
+    fhir:Condition.evidence.detail [ Reference(Any) ], ... ; # 0..* Supporting information found elsewhere
+  ], ...;
+  fhir:Condition.note [ Annotation ], ... ; # 0..* Additional information about the Condition
+]
